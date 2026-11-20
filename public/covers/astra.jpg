@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 360" width="560" height="360">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="80%">
+      <stop offset="0%" stop-color="#0d0a14"/>
+      <stop offset="100%" stop-color="#08090b"/>
+    </radialGradient>
+    <radialGradient id="ai" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#e879f9" stop-opacity="0.5"/>
+      <stop offset="50%" stop-color="#818cf8" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#818cf8" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blur"><feGaussianBlur stdDeviation="20"/></filter>
+    <filter id="blur2"><feGaussianBlur stdDeviation="5"/></filter>
+  </defs>
+  <rect width="560" height="360" fill="url(#bg)"/>
+  <ellipse cx="280" cy="180" rx="200" ry="150" fill="url(#ai)" filter="url(#blur)"/>
+  <!-- neural net nodes -->
+  <!-- input layer -->
+  <circle cx="120" cy="120" r="5" fill="#818cf8" fill-opacity="0.8"/>
+  <circle cx="120" cy="180" r="5" fill="#818cf8" fill-opacity="0.8"/>
+  <circle cx="120" cy="240" r="5" fill="#818cf8" fill-opacity="0.8"/>
+  <!-- hidden layer 1 -->
+  <circle cx="230" cy="100" r="5" fill="#c084fc" fill-opacity="0.8"/>
+  <circle cx="230" cy="155" r="5" fill="#c084fc" fill-opacity="0.8"/>
+  <circle cx="230" cy="210" r="5" fill="#c084fc" fill-opacity="0.8"/>
+  <circle cx="230" cy="265" r="5" fill="#c084fc" fill-opacity="0.8"/>
+  <!-- hidden layer 2 -->
+  <circle cx="340" cy="120" r="5" fill="#e879f9" fill-opacity="0.9"/>
+  <circle cx="340" cy="180" r="5" fill="#e879f9" fill-opacity="0.9"/>
+  <circle cx="340" cy="240" r="5" fill="#e879f9" fill-opacity="0.9"/>
+  <!-- output -->
+  <circle cx="440" cy="150" r="6" fill="#ffffff" fill-opacity="0.9"/>
+  <circle cx="440" cy="210" r="6" fill="#ffffff" fill-opacity="0.9"/>
+  <!-- connections (sample) -->
+  <line x1="120" y1="120" x2="230" y2="100" stroke="#818cf8" stroke-width="0.6" stroke-opacity="0.3"/>
+  <line x1="120" y1="120" x2="230" y2="155" stroke="#818cf8" stroke-width="0.6" stroke-opacity="0.3"/>
+  <line x1="120" y1="180" x2="230" y2="155" stroke="#818cf8" stroke-width="0.6" stroke-opacity="0.3"/>
+  <line x1="120" y1="180" x2="230" y2="210" stroke="#818cf8" stroke-width="0.6" stroke-opacity="0.3"/>
+  <line x1="120" y1="240" x2="230" y2="210" stroke="#818cf8" stroke-width="0.6" stroke-opacity="0.3"/>
+  <line x1="120" y1="240" x2="230" y2="265" stroke="#818cf8" stroke-width="0.6" stroke-opacity="0.3"/>
+  <line x1="230" y1="100" x2="340" y2="120" stroke="#c084fc" stroke-width="0.6" stroke-opacity="0.3"/>
+  <line x1="230" y1="155" x2="340" y2="120" stroke="#c084fc" stroke-width="0.6" stroke-opacity="0.3"/>
+  <line x1="230" y1="155" x2="340" y2="180" stroke="#c084fc" stroke-width="0.6" stroke-opacity="0.3"/>
+  <line x1="230" y1="210" x2="340" y2="180" stroke="#c084fc" stroke-width="0.6" stroke-opacity="0.3"/>
+  <line x1="230" y1="210" x2="340" y2="240" stroke="#c084fc" stroke-width="0.6" stroke-opacity="0.3"/>
+  <line x1="230" y1="265" x2="340" y2="240" stroke="#c084fc" stroke-width="0.6" stroke-opacity="0.3"/>
+  <line x1="340" y1="120" x2="440" y2="150" stroke="#e879f9" stroke-width="0.8" stroke-opacity="0.4"/>
+  <line x1="340" y1="180" x2="440" y2="150" stroke="#e879f9" stroke-width="0.8" stroke-opacity="0.4"/>
+  <line x1="340" y1="180" x2="440" y2="210" stroke="#e879f9" stroke-width="0.8" stroke-opacity="0.4"/>
+  <line x1="340" y1="240" x2="440" y2="210" stroke="#e879f9" stroke-width="0.8" stroke-opacity="0.4"/>
+  <text x="32" y="52" font-family="ui-monospace,monospace" font-size="9" letter-spacing="0.25em" fill="#e879f9" fill-opacity="0.7">ASTRA</text>
+  <text x="32" y="330" font-family="ui-monospace,monospace" font-size="8" letter-spacing="0.18em" fill="#ffffff" fill-opacity="0.25">05 / AI ANALYTICS</text>
+</svg>

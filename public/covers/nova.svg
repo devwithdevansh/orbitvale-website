@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 360" width="560" height="360">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="80%">
+      <stop offset="0%" stop-color="#0a0d10"/>
+      <stop offset="100%" stop-color="#08090b"/>
+    </radialGradient>
+    <radialGradient id="chain" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blur"><feGaussianBlur stdDeviation="18"/></filter>
+  </defs>
+  <rect width="560" height="360" fill="url(#bg)"/>
+  <ellipse cx="280" cy="180" rx="220" ry="140" fill="url(#chain)" filter="url(#blur)"/>
+  <!-- hexagonal chain blocks -->
+  <polygon points="180,130 205,115 230,130 230,160 205,175 180,160" fill="none" stroke="#f59e0b" stroke-width="1.2" stroke-opacity="0.7"/>
+  <polygon points="230,130 255,115 280,130 280,160 255,175 230,160" fill="#f59e0b" fill-opacity="0.08" stroke="#f59e0b" stroke-width="1.2" stroke-opacity="0.7"/>
+  <polygon points="280,130 305,115 330,130 330,160 305,175 280,160" fill="none" stroke="#f59e0b" stroke-width="1.2" stroke-opacity="0.7"/>
+  <polygon points="330,130 355,115 380,130 380,160 355,175 330,160" fill="#f59e0b" fill-opacity="0.05" stroke="#f59e0b" stroke-width="1.2" stroke-opacity="0.5"/>
+  <!-- hash lines inside active block -->
+  <line x1="237" y1="135" x2="273" y2="155" stroke="#f59e0b" stroke-width="0.5" stroke-opacity="0.4"/>
+  <line x1="237" y1="145" x2="273" y2="145" stroke="#f59e0b" stroke-width="0.5" stroke-opacity="0.4"/>
+  <line x1="237" y1="155" x2="273" y2="135" stroke="#f59e0b" stroke-width="0.5" stroke-opacity="0.4"/>
+  <!-- chain link connectors -->
+  <line x1="180" y1="145" x2="130" y2="145" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="4 3"/>
+  <line x1="380" y1="145" x2="430" y2="145" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="4 3"/>
+  <!-- second row -->
+  <polygon points="205,195 230,180 255,195 255,225 230,240 205,225" fill="none" stroke="#f59e0b" stroke-width="0.8" stroke-opacity="0.4"/>
+  <polygon points="305,195 330,180 355,195 355,225 330,240 305,225" fill="none" stroke="#f59e0b" stroke-width="0.8" stroke-opacity="0.4"/>
+  <text x="32" y="52" font-family="ui-monospace,monospace" font-size="9" letter-spacing="0.25em" fill="#f59e0b" fill-opacity="0.7">NOVA</text>
+  <text x="32" y="330" font-family="ui-monospace,monospace" font-size="8" letter-spacing="0.18em" fill="#ffffff" fill-opacity="0.25">06 / BLOCKCHAIN INFRA</text>
+</svg>

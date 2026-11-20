@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --bg: #08090b;
+  --panel: #0f1013;
+  --panel-2: #14161a;
+  --line: rgba(255, 255, 255, 0.13);
+  --line-2: rgba(255, 255, 255, 0.28);
+  --ink: #f4f4f6;
+  --muted: #8a8b93;
+  --dim: #5c5e66;
+  --accent: #7ff3d0;
+  --accent-2: #ffb86b;
+  --accent-dim: rgba(127, 243, 208, 0.12);
+  /* --font-display and --font-mono are injected by next/font/local in layout.tsx */
+  --font-sans: var(--font-display, 'Syne', -apple-system, BlinkMacSystemFont, sans-serif);
+  --ring-tilt: -13deg;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+
+::selection {
+  background: rgba(127, 243, 208, 0.28);
+  color: var(--ink);
+}
+
+/* ── ServicesOrbit: core pulse ──────────────────────────────────────── */
+@keyframes ov-pulse {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(127,243,208,0.08), 0 0 24px rgba(127,243,208,0.18), 0 0 48px rgba(127,243,208,0.08); }
+  50%       { box-shadow: 0 0 0 1px rgba(127,243,208,0.18), 0 0 36px rgba(127,243,208,0.32), 0 0 72px rgba(127,243,208,0.14); }
+}
+.ov-pulse { animation: ov-pulse 3s ease-in-out infinite; }
+
+/* ── Accretion disk shimmer ─────────────────────────────────────────── */
+@keyframes shimmer {
+  from { opacity: 0.7; }
+  to   { opacity: 1.0; }
+}

@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orbitvale — Site Wireframe v1</title>
+<style>
+  :root{
+    --bg:#0b0b0d;
+    --panel:#111114;
+    --panel-2:#15161a;
+    --line:rgba(255,255,255,.16);
+    --line-strong:rgba(255,255,255,.34);
+    --ink:#f2f2f4;
+    --muted:#8b8b96;
+    --accent:#7ff3d0;
+    --accent-dim:rgba(127,243,208,.14);
+    --warn:#ffb86b;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(rgba(255,255,255,.045) 1px,transparent 1px);
+    background-size:26px 26px;
+  }
+  .wrap{max-width:1120px;margin:0 auto;padding:56px 28px 120px}
+
+  /* ---------- masthead ---------- */
+  .mast{border-bottom:1px solid var(--line);padding-bottom:34px;margin-bottom:48px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:22px}
+  .brandrow{display:flex;align-items:center;gap:26px;flex-wrap:wrap}
+  .brandmark{
+    font-family:var(--mono);font-weight:700;font-size:34px;letter-spacing:.30em;
+    text-transform:uppercase;line-height:1;padding-right:.30em;
+  }
+  .brandmark span{color:transparent;-webkit-text-stroke:1px var(--ink)}
+  .mast h1{font-size:17px;font-weight:500;margin:0;color:var(--muted);letter-spacing:.01em}
+  .mast p{margin:20px 0 0;max-width:62ch;color:var(--muted);font-size:14.5px;line-height:1.75}
+  .meta{display:flex;gap:28px;flex-wrap:wrap;margin-top:26px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+  .meta b{color:var(--ink);font-weight:600}
+
+  /* ---------- section headings ---------- */
+  h2.sec{
+    font-family:var(--mono);font-size:12px;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--muted);font-weight:600;margin:64px 0 22px;
+    display:flex;align-items:center;gap:14px;
+  }
+  h2.sec::after{content:"";flex:1;height:1px;background:var(--line)}
+  h2.sec:first-of-type{margin-top:0}
+
+  /* ---------- design tokens ---------- */
+  .tokens{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+  .tok{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .tok .k{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+  .tok .v{font-size:14px;font-weight:600;margin-bottom:6px}
+  .tok .d{font-size:12px;color:var(--muted);line-height:1.55}
+  .sw{height:44px;border-radius:8px;border:1px solid var(--line);margin-bottom:12px}
+  .sw-dark{background:#0b0b0d}
+  .sw-ink{background:#f2f2f4}
+  .sw-accent{background:linear-gradient(120deg,#7ff3d0,#4fd1c5)}
+  .sw-warm{background:linear-gradient(120deg,#ffb86b,#ff7a59)}
+
+  /* ---------- wireframe frame ---------- */
+  .frame{
+    background:linear-gradient(180deg,var(--panel),var(--panel-2));
+    border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:18px;
+  }
+  .frame-head{
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+    padding:12px 18px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02);
+  }
+  .num{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.1em}
+  .frame-title{font-size:13.5px;font-weight:600;letter-spacing:.02em}
+  .chips{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+  .chip{
+    font-family:var(--mono);font-size:10px;letter-spacing:.08em;
+    background:var(--accent-dim);color:var(--accent);
+    border:1px solid rgba(127,243,208,.28);border-radius:999px;padding:3px 9px;white-space:nowrap;
+  }
+  .chip.alt{background:rgba(255,255,255,.05);color:var(--muted);border-color:var(--line)}
+  .canvas{padding:26px 22px;min-height:120px;position:relative}
+  .note{
+    font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--muted);
+    margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);
+  }
+  .note b{color:var(--ink);font-weight:600}
+
+  /* wireframe primitives */
+  .bar{background:rgba(255,255,255,.13);border-radius:4px;height:10px;margin-bottom:9px}
+  .bar.h2x{height:20px}
+  .bar.big{height:34px;border-radius:6px}
+  .bar.tiny{height:7px}
+  .dashed{border:1px dashed var(--line-strong);border-radius:8px;background:transparent}
+  .row{display:flex;gap:12px}
+  .row>*{flex:1}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .img-ph{
+    border:1px solid var(--line);border-radius:8px;
+    background:
+      linear-gradient(135deg,transparent 49%,var(--line) 49.5%,var(--line) 50.5%,transparent 51%),
+      linear-gradient(45deg,transparent 49%,var(--line) 49.5%,var(--line) 50.5%,transparent 51%),
+      rgba(255,255,255,.02);
+  }
+  .orbitbox{position:relative;display:flex;align-items:center;justify-content:center;height:150px}
+  .orbitring{
+    width:200px;height:78px;border:1px solid var(--line-strong);border-radius:50%;
+    transform:rotate(-18deg);position:relative;
+  }
+  .orbitring::after{
+    content:"";position:absolute;width:10px;height:10px;border-radius:50%;
+    background:var(--accent);top:2px;left:50%;transform:translateX(-50%);
+    box-shadow:0 0 14px var(--accent);
+  }
+  .wordmark-ph{
+    font-family:var(--mono);font-weight:700;font-size:30px;letter-spacing:.34em;
+    text-transform:uppercase;text-align:center;position:absolute;padding-right:.34em;
+  }
+  .center{text-align:center}
+  .tlabel{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin-bottom:12px}
+
+  /* page tabs */
+  .pages{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:22px}
+  .ptab{
+    border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:var(--panel);
+    font-family:var(--mono);font-size:12px;letter-spacing:.06em;
+  }
+  .ptab small{display:block;color:var(--muted);font-size:10px;margin-top:6px;letter-spacing:.04em}
+
+  /* component map table */
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600;border-bottom-color:var(--line-strong)}
+  td:nth-child(1){font-family:var(--mono);font-size:11.5px;color:var(--accent);white-space:nowrap}
+  td:nth-child(2){color:var(--ink);white-space:nowrap}
+  td:nth-child(3){color:var(--muted);line-height:1.6}
+  .tblwrap{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--panel)}
+
+  /* phases */
+  .phases{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+  .phase{border:1px solid var(--line);border-radius:12px;padding:18px;background:var(--panel)}
+  .phase .n{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--accent);margin-bottom:10px}
+  .phase h4{margin:0 0 10px;font-size:14px}
+  .phase ul{margin:0;padding-left:16px;color:var(--muted);font-size:12.5px;line-height:1.8}
+
+  footer{margin-top:70px;padding-top:26px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.1em;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+
+  @media(max-width:720px){
+    .grid3,.grid4{grid-template-columns:1fr 1fr}
+    .brandmark{font-size:24px}
+    .wordmark-ph{font-size:19px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ================= MASTHEAD ================= -->
+  <div class="mast">
+    <div class="eyebrow">Wireframe · v1 · for approval</div>
+    <div class="brandrow">
+      <div class="brandmark">ORBIT<span>VALE</span></div>
+      <h1>Website structure &amp; motion map</h1>
+    </div>
+    <p>
+      A dark, high-motion site built from 31 ready-made animated components already in the repo.
+      This document is the blueprint: every section on every page, which component fills it, and
+      how the scroll story is sequenced — before a single line of the real build goes in.
+    </p>
+    <div class="meta">
+      <span>Stack <b>Next.js · TS · Tailwind · shadcn</b></span>
+      <span>3D <b>three / R3F / drei</b></span>
+      <span>Motion <b>Framer Motion + scroll</b></span>
+      <span>Pages <b>6</b></span>
+    </div>
+  </div>
+
+  <!-- ================= DESIGN SYSTEM ================= -->
+  <h2 class="sec">01 — Design system</h2>
+  <div class="tokens">
+    <div class="tok">
+      <div class="sw sw-dark"></div>
+      <div class="k">Base</div>
+      <div class="v">#0B0B0D</div>
+      <div class="d">Near-black. Every section sits on this; nothing is pure #000, so glows read as light rather than holes.</div>
+    </div>
+    <div class="tok">
+      <div class="sw sw-ink"></div>
+      <div class="k">Ink</div>
+      <div class="v">#F2F2F4</div>
+      <div class="d">Off-white for text — matches the logo's white wordmark without the harshness of pure white.</div>
+    </div>
+    <div class="tok">
+      <div class="sw sw-accent"></div>
+      <div class="k">Accent — primary</div>
+      <div class="v">Mint / cyan #7FF3D0</div>
+      <div class="d">The "orbit" light. Used sparingly: single planet dot, active nav, one glowing CTA.</div>
+    </div>
+    <div class="tok">
+      <div class="sw sw-warm"></div>
+      <div class="k">Accent — secondary</div>
+      <div class="v">Warm #FFB86B</div>
+      <div class="d">Optional partner tone for the accretion / black-hole sections only, so those moments feel hot.</div>
+    </div>
+    <div class="tok" style="grid-column:span 2">
+      <div class="k">Typography</div>
+      <div class="v">Stencil display + geometric sans</div>
+      <div class="d">
+        Headlines use a wide-tracked stencil/geometric face echoing the ORBITVALE wordmark (tracking ~0.3em on the
+        brand, less on body). Body copy in a clean geometric sans at 15–17px, 1.7 line-height. Mono used for
+        labels, indices and the "01 / 06" counters.
+      </div>
+    </div>
+    <div class="tok" style="grid-column:span 2">
+      <div class="k">Motion rules</div>
+      <div class="v">Scroll-driven, one hero per page</div>
+      <div class="d">
+        Exactly one full-bleed 3D moment per viewport — never two competing shaders. Every animation respects
+        <code style="font-family:var(--mono);color:var(--accent)">prefers-reduced-motion</code>, and all heavy canvases
+        pause when off-screen.
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= HOME PAGE ================= -->
+  <h2 class="sec">02 — Home page: scroll sequence</h2>
+
+  <div class="frame">
+    <div class="frame-head">
+      <span class="num">01</span><span class="frame-title">Hero — the orbit lock-on</span>
+      <div class="chips"><span class="chip">OrbitalHeroSection</span><span class="chip alt">EZPZTypeTunnel</span></div>
+    </div>
+    <div class="canvas">
+      <div class="orbitbox">
+        <div class="orbitring"></div>
+        <div class="wordmark-ph">ORBITVALE</div>
+      </div>
+      <div class="row" style="margin-top:18px">
+        <div class="dashed" style="height:34px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--muted)">NAV · WORK · SERVICES · STUDIO · CONTACT</div>
+      </div>
+      <div style="margin-top:20px">
+        <div class="bar h2x" style="width:58%"></div>
+        <div class="bar" style="width:40%"></div>
+      </div>
+    </div>
+    <div class="note">
+      <b>Motion:</b> particles drift into an orbit, the ring draws itself once, then the wordmark resolves through the type-tunnel.
+      <b>Exit:</b> scrolling pulls the camera through the ring — the ring becomes the portal into section 02.
+    </div>
+  </div>
+
+  <div class="frame">
+    <div class="frame-head">
+      <span class="num">02</span><span class="frame-title">Positioning statement</span>
+      <div class="chips"><span class="chip">SingularityCore</span></div>
+    </div>
+    <div class="canvas">
+      <div style="display:flex;gap:26px;align-items:center">
+        <div class="img-ph" style="width:130px;height:130px;border-radius:50%;flex:none"></div>
+        <div style="flex:1">
+          <div class="bar h2x" style="width:86%"></div>
+          <div class="bar h2x" style="width:70%"></div>
+          <div class="bar" style="width:52%;margin-top:14px"></div>
+        </div>
+      </div>
+    </div>
+    <div class="note">
+      <b>Motion:</b> a particle singularity pulses at the left; particles gently fall inward. Copy types in line by line.
+      <b>Why here:</b> it's the quiet beat after the loud hero — gives the eye somewhere to land.
+    </div>
+  </div>
+
+  <div class="frame">
+    <div class="frame-head">
+      <span class="num">03</span><span class="frame-title">Scroll-drawn narrative</span>
+      <div class="chips"><span class="chip">svg-follow-scroll</span><span class="chip alt">ScrollHeroSection</span></div>
+    </div>
+    <div class="canvas">
+      <svg viewBox="0 0 600 130" style="width:100%;height:130px">
+        <path d="M10 100 C 120 100, 150 20, 240 60 S 380 120, 470 40 L 590 55"
+              fill="none" stroke="rgba(127,243,208,.55)" stroke-width="1.5" stroke-dasharray="6 6"/>
+        <circle cx="10" cy="100" r="4" fill="rgba(127,243,208,.9)"/>
+        <circle cx="240" cy="60" r="3" fill="rgba(255,255,255,.5)"/>
+        <circle cx="470" cy="40" r="3" fill="rgba(255,255,255,.5)"/>
+      </svg>
+      <div class="row" style="margin-top:6px">
+        <div><div class="bar tiny"></div><div class="bar tiny" style="width:70%"></div></div>
+        <div><div class="bar tiny"></div><div class="bar tiny" style="width:85%"></div></div>
+        <div><div class="bar tiny"></div><div class="bar tiny" style="width:60%"></div></div>
+      </div>
+    </div>
+    <div class="note">
+      <b>Motion:</b> a single glowing path draws itself as you scroll, threading three story beats (who we are → what we build → who we build it for). First fully scroll-linked section on the site.
+    </div>
+  </div>
+
+  <div class="frame">
+    <div class="frame-head">
+      <span class="num">04</span><span class="frame-title">Services — interactive grid</span>
+      <div class="chips"><span class="chip">CareersValues → ValueGrid</span></div>
+    </div>
+    <div class="canvas">
+      <div class="tlabel">01 / 06 &nbsp; six disciplines</div>
+      <div class="grid3">
+        <div class="dashed" style="height:82px"></div>
+        <div class="dashed" style="height:82px"></div>
+        <div class="dashed" style="height:82px"></div>
+        <div class="dashed" style="height:82px"></div>
+        <div class="dashed" style="height:82px"></div>
+        <div class="dashed" style="height:82px"></div>
+      </div>
+    </div>
+    <div class="note">
+      <b>Motion:</b> crosshair-style grid; cards lift and reveal a line of detail on hover, one card can expand into focus. Adapted from the careers/values grid — same mechanics, new copy.
+    </div>
+  </div>
+
+  <div class="frame">
+    <div class="frame-head">
+      <span class="num">05</span><span class="frame-title">Selected work — the wheel</span>
+      <div class="chips"><span class="chip">WorksWheel</span></div>
+    </div>
+    <div class="canvas">
+      <div style="display:flex;gap:14px;align-items:center;justify-content:center;height:120px">
+        <div class="img-ph" style="width:64px;height:86px;opacity:.4"></div>
+        <div class="img-ph" style="width:78px;height:104px;opacity:.7"></div>
+        <div class="img-ph" style="width:96px;height:128px"></div>
+        <div class="img-ph" style="width:78px;height:104px;opacity:.7"></div>
+        <div class="img-ph" style="width:64px;height:86px;opacity:.4"></div>
+      </div>
+    </div>
+    <div class="note">
+      <b>Motion:</b> cards sit on a rotating 3D drum; drag or scroll spins the wheel, front card snaps into focus with a project title. This is the main work browser.
+    </div>
+  </div>
+
+  <div class="frame">
+    <div class="frame-head">
+      <span class="num">06</span><span class="frame-title">Deep-tech moment — black hole</span>
+      <div class="chips"><span class="chip">BlackHoleVortex</span><span class="chip alt">EtchedAccretion</span></div>
+    </div>
+    <div class="canvas">
+      <div style="height:140px;display:flex;align-items:center;justify-content:center;position:relative">
+        <div style="width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,#000 34%,rgba(255,184,107,.5) 40%,rgba(255,122,89,.18) 58%,transparent 70%)"></div>
+      </div>
+    </div>
+    <div class="note">
+      <b>Motion:</b> full-bleed shader — the one "wow" moment in the middle of the page. Accretion disk rotates, lensing warps the backdrop, stars are pulled in. Copy sits at the edge, never over the centre. <b>Note:</b> pick <i>one</i> of these two; they're alternatives, not a pair.
+    </div>
+  </div>
+
+  <div class="frame">
+    <div class="frame-head">
+      <span class="num">07</span><span class="frame-title">Global reach — the network globe</span>
+      <div class="chips"><span class="chip">GlobeCdn</span></div>
+    </div>
+    <div class="canvas">
+      <div style="display:flex;gap:24px;align-items:center">
+        <div class="img-ph" style="width:140px;height:140px;border-radius:50%;flex:none"></div>
+        <div style="flex:1">
+          <div class="bar h2x" style="width:60%"></div>
+          <div class="bar" style="width:80%;margin-top:12px"></div>
+          <div class="bar" style="width:66%"></div>
+          <div class="row" style="margin-top:16px">
+            <div class="dashed" style="height:30px"></div>
+            <div class="dashed" style="height:30px"></div>
+            <div class="dashed" style="height:30px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="note">
+      <b>Motion:</b> rotating dot-globe with arcs pulsing between offices/regions — turns "we're an IT company" into something visual. Counters for delivery points animate up on entry.
+    </div>
+  </div>
+
+  <div class="frame">
+    <div class="frame-head">
+      <span class="num">08</span><span class="frame-title">Gallery sphere — the pitch image</span>
+      <div class="chips"><span class="chip">ParticleSphere</span><span class="chip alt">cosmos-3d-orbit-gallery</span></div>
+    </div>
+    <div class="canvas">
+      <div style="height:150px;display:flex;align-items:center;justify-content:center">
+        <div class="dashed" style="width:160px;height:160px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.14em">WORK THUMBS IN ORBIT</div>
+      </div>
+    </div>
+    <div class="note">
+      <b>Motion:</b> client/team thumbnails orbit on a particle sphere, slowly rotating; drag to spin. Heaviest asset on the page — lazy-load it, and only mount once scrolled near.
+    </div>
+  </div>
+
+  <div class="frame">
+    <div class="frame-head">
+      <span class="num">09</span><span class="frame-title">CTA — jump to light speed</span>
+      <div class="chips"><span class="chip">LightSpeed</span><span class="chip alt">WarpTunnel</span></div>
+    </div>
+    <div class="canvas">
+      <div class="center" style="padding:10px 0 4px">
+        <div class="bar h2x" style="width:70%;margin:0 auto 10px"></div>
+        <div class="bar" style="width:44%;margin:0 auto 22px"></div>
+        <div class="dashed" style="width:180px;height:44px;margin:0 auto;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--accent);border-color:rgba(127,243,208,.5)">START A PROJECT</div>
+      </div>
+    </div>
+    <div class="note">
+      <b>Motion:</b> stars streak into a tunnel around the CTA, accelerating on hover. Final hero moment — then the footer is calm, flat, and still.
+    </div>
+  </div>
+
+  <!-- ================= OTHER PAGES ================= -->
+  <h2 class="sec">03 — Secondary pages</h2>
+
+  <div class="pages">
+    <div class="ptab">/about<small>Story + team</small></div>
+    <div class="ptab">/services<small>Deep dive</small></div>
+    <div class="ptab">/work<small>Project index</small></div>
+    <div class="ptab">/work/[slug]<small>Case study</small></div>
+    <div class="ptab">/contact<small>Brief form</small></div>
+    <div class="ptab">/404<small>Bottle page</small></div>
+  </div>
+
+  <div class="frame">
+    <div class="frame-head">
+      <span class="num">A</span><span class="frame-title">About — quiet page, ambient only</span>
+      <div class="chips"><span class="chip">OrbitalSphereBackground</span><span class="chip alt">SpiralAnimation</span></div>
+    </div>
+    <div class="canvas">
+      <div class="tlabel">ambient background behind all content</div>
+      <div class="bar h2x" style="width:46%"></div>
+      <div class="bar" style="width:76%;margin-top:8px"></div>
+      <div class="bar" style="width:64%"></div>
+      <div class="tlabel" style="margin-top:22px">Milestone timeline</div>
+      <div class="row">
+        <div class="dashed" style="height:56px"></div>
+        <div class="dashed" style="height:56px"></div>
+        <div class="dashed" style="height:56px"></div>
+        <div class="dashed" style="height:56px"></div>
+      </div>
+    </div>
+    <div class="note">
+      Deliberately restrained — after the home page, this page de-escalates. Spiral animation draws the company timeline as you scroll; no full-bleed shader.
+    </div>
+  </div>
+
+  <div class="frame">
+    <div class="frame-head">
+      <span class="num">B</span><span class="frame-title">Services — one accordion, one carousel</span>
+      <div class="chips"><span class="chip">ArcCarousel</span><span class="chip alt">ValueCard</span></div>
+    </div>
+    <div class="canvas">
+      <div class="row">
+        <div style="flex:1.2">
+          <div class="dashed" style="height:44px;margin-bottom:8px;display:flex;align-items:center;padding:0 12px;font-family:var(--mono);font-size:10px;color:var(--muted)">01 · STRATEGY ▾</div>
+          <div class="dashed" style="height:44px;margin-bottom:8px"></div>
+          <div class="dashed" style="height:44px;margin-bottom:8px"></div>
+          <div class="dashed" style="height:44px"></div>
+        </div>
+        <div class="img-ph" style="flex:1"></div>
+      </div>
+    </div>
+    <div class="note">Service rows expand in place; the right pane swaps art via the arc carousel as you open a row.</div>
+  </div>
+
+  <div class="frame">
+    <div class="frame-head">
+      <span class="num">C</span><span class="frame-title">Work index → case study</span>
+      <div class="chips"><span class="chip">CoverFlow</span><span class="chip alt">NeonLoop</span></div>
+    </div>
+    <div class="canvas">
+      <div class="grid4" style="margin-bottom:14px">
+        <div class="img-ph" style="height:74px"></div>
+        <div class="img-ph" style="height:74px"></div>
+        <div class="img-ph" style="height:74px"></div>
+        <div class="img-ph" style="height:74px"></div>
+      </div>
+      <div class="tlabel">case study detail — full-bleed story</div>
+      <div class="bar" style="width:50%"></div>
+      <div class="dashed" style="height:90px;margin-top:10px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.14em">FULL-BLEED MEDIA</div>
+    </div>
+    <div class="note">
+      Index uses cover-flow for featured projects (3D shelf). Case study pages follow the Halden pattern: big image first, generous type, result counters, then next-project link via a neon loop transition.
+    </div>
+  </div>
+
+  <div class="frame">
+    <div class="frame-head">
+      <span class="num">D</span><span class="frame-title">Contact &amp; 404</span>
+      <div class="chips"><span class="chip">BottleNotFound</span><span class="chip alt">LunarGravityCard</span></div>
+    </div>
+    <div class="canvas">
+      <div class="row">
+        <div style="flex:1">
+          <div class="tlabel">contact — brief form</div>
+          <div class="dashed" style="height:28px;margin-bottom:8px"></div>
+          <div class="dashed" style="height:28px;margin-bottom:8px"></div>
+          <div class="dashed" style="height:56px;margin-bottom:8px"></div>
+          <div class="dashed" style="height:34px;width:130px;border-color:rgba(127,243,208,.5)"></div>
+        </div>
+        <div style="flex:1">
+          <div class="tlabel">404 — bottle on waves</div>
+          <div class="dashed" style="height:134px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;color:var(--muted)">SVG + CSS, theme-aware</div>
+        </div>
+      </div>
+    </div>
+    <div class="note">404 needs no 3D — it's the one place a pure-SVG animation is the right call (fast, on-brand, no canvas).</div>
+  </div>
+
+  <!-- ================= COMPONENT MAP ================= -->
+  <h2 class="sec">04 — Component inventory (31 in repo → destinations)</h2>
+  <div class="tblwrap">
+    <table>
+      <thead>
+        <tr><th>Component file</th><th>Export</th><th>Where it lands</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>orbital-hero-section</td><td>OrbitalHeroSection</td><td>Home 01 — hero</td></tr>
+        <tr><td>ezpz-type-tunnel</td><td>EZPZTypeTunnel</td><td>Home 01 — wordmark reveal</td></tr>
+        <tr><td>singularity</td><td>SingularityCore</td><td>Home 02 — statement</td></tr>
+        <tr><td>svg-follow-scroll</td><td>—</td><td>Home 03 — narrative line</td></tr>
+        <tr><td>scroll-hero-section</td><td>—</td><td>Home 03 — alt / merge with above</td></tr>
+        <tr><td>interactive-values-grid</td><td>CareersValues</td><td>Home 04 — services grid · About</td></tr>
+        <tr><td>works-wheel</td><td>WorksWheel</td><td>Home 05 — work</td></tr>
+        <tr><td>black-hole-vortex</td><td>BlackHoleVortex</td><td>Home 06 — deep-tech (pick one)</td></tr>
+        <tr><td>etched-accretion</td><td>EtchedAccretion</td><td>Home 06 — alt (pick one)</td></tr>
+        <tr><td>cobe-globe-cdn</td><td>GlobeCdn</td><td>Home 07 — global reach</td></tr>
+        <tr><td>orbiting-circles-02</td><td>—</td><td>Home 07 — alt globe</td></tr>
+        <tr><td>cosmos-3d-orbit-gallery</td><td>ParticleSphere</td><td>Home 08 — gallery sphere</td></tr>
+        <tr><td>light-speed</td><td>LightSpeed</td><td>Home 09 — CTA</td></tr>
+        <tr><td>warp-tunnel</td><td>WarpTunnel</td><td>Home 09 — alt CTA</td></tr>
+        <tr><td>warp-drive-shader</td><td>—</td><td>Spare / section divider</td></tr>
+        <tr><td>shader-lines</td><td>ShaderAnimation</td><td>Spare / divider</td></tr>
+        <tr><td>halftone-nebula</td><td>HalftoneNebula</td><td>Spare — could back /about</td></tr>
+        <tr><td>orbital-sphere</td><td>OrbitalSphereBackground</td><td>/about ambient bg</td></tr>
+        <tr><td>spiral-animation</td><td>SpiralAnimation</td><td>/about timeline</td></tr>
+        <tr><td>arc-carousel</td><td>ArcCarousel</td><td>/services</td></tr>
+        <tr><td>3d-curved-carousel</td><td>CurvedLensCarousel</td><td>/services alt · /work alt</td></tr>
+        <tr><td>cover-flow</td><td>CoverFlow</td><td>/work featured</td></tr>
+        <tr><td>neon-loop</td><td>NeonLoop</td><td>/work transitions</td></tr>
+        <tr><td>chrome-arcs</td><td>ChromeArcs</td><td>Spare — accent band</td></tr>
+        <tr><td>orbit-flip-slider</td><td>OrbitFlipSlider</td><td>Spare — testimonial / team</td></tr>
+        <tr><td>thinking-orbs</td><td>—</td><td>Spare — loader / "process"</td></tr>
+        <tr><td>bottle-page-not-found</td><td>BottleNotFound</td><td>/404</td></tr>
+        <tr><td>lunar-gravity-card</td><td>LunarGravityCard</td><td>Contact / feature card</td></tr>
+        <tr><td>sphere</td><td>—</td><td>Spare — small 3D accent</td></tr>
+        <tr><td>airlock-hero</td><td>AirlockHero</td><td>Alt hero option (keep in reserve)</td></tr>
+        <tr><td>orbital-hero (demo)</td><td>—</td><td>Reference only</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ================= BUILD ORDER ================= -->
+  <h2 class="sec">05 — Build order</h2>
+  <div class="phases">
+    <div class="phase">
+      <div class="n">PHASE 0</div>
+      <h4>Foundation</h4>
+      <ul>
+        <li>Next.js + TS + Tailwind + shadcn</li>
+        <li>Design tokens, fonts, dark theme</li>
+        <li>Logo asset + favicon</li>
+        <li>Nav / footer shell</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="n">PHASE 1</div>
+      <h4>Hero + scroll spine</h4>
+      <ul>
+        <li>Orbital hero</li>
+        <li>Type-tunnel wordmark</li>
+        <li>Singularity statement</li>
+        <li>SVG scroll narrative</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="n">PHASE 2</div>
+      <h4>Core content</h4>
+      <ul>
+        <li>Services grid</li>
+        <li>Works wheel</li>
+        <li>Globe + counters</li>
+        <li>Gallery sphere (lazy)</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="n">PHASE 3</div>
+      <h4>Signature moments</h4>
+      <ul>
+        <li>Black-hole shader</li>
+        <li>Light-speed CTA</li>
+        <li>Page transitions</li>
+        <li>Scroll sequencing glue</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="n">PHASE 4</div>
+      <h4>Secondary pages</h4>
+      <ul>
+        <li>About · Services</li>
+        <li>Work index + case study</li>
+        <li>Contact · 404</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="n">PHASE 5</div>
+      <h4>Polish &amp; ship</h4>
+      <ul>
+        <li>Reduced-motion audit</li>
+        <li>Mobile / perf pass</li>
+        <li>SEO + OG images</li>
+        <li>Deploy</li>
+      </ul>
+    </div>
+  </div>
+
+  <footer>
+    <span>ORBITVALE · WIREFRAME v1</span>
+    <span>NEXT: APPROVE STRUCTURE → PHASE 0</span>
+  </footer>
+</div>
+</body>
+</html>

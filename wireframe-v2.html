@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orbitvale — The Immersive Story · Wireframe v2</title>
+<style>
+  :root{
+    --bg:#08090b;
+    --panel:#0f1013;
+    --panel-2:#14161a;
+    --line:rgba(255,255,255,.13);
+    --line-2:rgba(255,255,255,.28);
+    --ink:#f4f4f6;
+    --muted:#8a8b93;
+    --dim:#5c5e66;
+    --accent:#7ff3d0;
+    --accent-2:#ffb86b;
+    --accent-dim:rgba(127,243,208,.12);
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;line-height:1.6;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px 140px}
+
+  /* ---------------- HERO ---------------- */
+  .hero{position:relative;padding:120px 0 96px;border-bottom:1px solid var(--line);overflow:hidden}
+  .hero-rings{position:absolute;inset:-40% -10% auto auto;width:900px;height:900px;pointer-events:none;opacity:.55}
+  .hero-rings div{position:absolute;inset:0;border:1px solid var(--line);border-radius:50%}
+  .hero-rings .r1{transform:rotate(-18deg) scaleY(.34)}
+  .hero-rings .r2{transform:rotate(-18deg) scaleY(.52);border-color:rgba(127,243,208,.22)}
+  .hero-rings .r3{transform:rotate(-18deg) scaleY(.72);border-color:rgba(255,255,255,.06)}
+  .hero-rings .dot{
+    position:absolute;width:9px;height:9px;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 22px var(--accent);top:calc(50% - 450px + 6px);left:50%;transform:translateX(-50%);
+  }
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin-bottom:28px;position:relative}
+  h1.title{
+    font-size:clamp(42px,7.2vw,92px);line-height:.94;letter-spacing:-.03em;font-weight:600;
+    margin:0 0 26px;max-width:15ch;position:relative;
+  }
+  h1.title em{font-style:normal;color:transparent;-webkit-text-stroke:1.2px rgba(255,255,255,.45)}
+  .lede{max-width:60ch;color:var(--muted);font-size:16.5px;line-height:1.75;position:relative;margin:0 0 40px}
+  .facts{display:flex;gap:46px;flex-wrap:wrap;position:relative;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+  .facts b{display:block;color:var(--ink);font-size:22px;letter-spacing:-.01em;font-family:var(--sans);font-weight:600;margin-bottom:4px}
+
+  /* ---------------- SECTION ---------------- */
+  h2.sec{
+    font-family:var(--mono);font-size:11px;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--dim);font-weight:600;margin:88px 0 8px;display:flex;align-items:center;gap:14px;
+  }
+  h2.sec::after{content:"";flex:1;height:1px;background:var(--line)}
+  .sec-sub{font-size:clamp(26px,3.4vw,40px);letter-spacing:-.02em;font-weight:600;line-height:1.1;margin:0 0 14px;max-width:22ch}
+  .sec-note{color:var(--muted);font-size:14.5px;max-width:66ch;margin:0 0 34px;line-height:1.75}
+
+  /* ---------------- BIG IDEA ---------------- */
+  .bigidea{
+    border:1px solid var(--line-2);border-radius:20px;padding:44px 40px;margin-top:30px;
+    background:
+      radial-gradient(120% 140% at 88% 0%,rgba(127,243,208,.09),transparent 60%),
+      linear-gradient(180deg,var(--panel),var(--panel-2));
+    position:relative;overflow:hidden;
+  }
+  .bigidea .q{font-size:clamp(22px,2.8vw,32px);letter-spacing:-.015em;line-height:1.35;font-weight:500;margin:0 0 20px;max-width:30ch}
+  .bigidea .q span{color:var(--accent)}
+  .bigidea p{color:var(--muted);font-size:14.5px;max-width:64ch;margin:0;line-height:1.8}
+
+  /* ---------------- CHAPTERS / SCROLL STORY ---------------- */
+  .acts{position:relative;margin-top:26px}
+  .acts::before{content:"";position:absolute;left:19px;top:12px;bottom:34px;width:1px;background:linear-gradient(180deg,var(--accent),rgba(127,243,208,.06))}
+  .act{position:relative;padding:0 0 34px 62px}
+  .act:last-child{padding-bottom:0}
+  .act .node{
+    position:absolute;left:11px;top:4px;width:17px;height:17px;border-radius:50%;
+    background:var(--bg);border:1px solid var(--accent);box-shadow:0 0 0 4px var(--bg),0 0 18px rgba(127,243,208,.35);
+  }
+  .act .node.filled{background:var(--accent)}
+  .act .ano{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--accent);text-transform:uppercase;margin-bottom:6px}
+  .act h3{margin:0 0 8px;font-size:19px;letter-spacing:-.01em;font-weight:600}
+  .act p{margin:0 0 14px;color:var(--muted);font-size:14px;max-width:66ch;line-height:1.75}
+  .cam{
+    display:inline-flex;gap:10px;align-items:center;font-family:var(--mono);font-size:10.5px;
+    letter-spacing:.1em;color:var(--accent);background:var(--accent-dim);
+    border:1px solid rgba(127,243,208,.25);border-radius:999px;padding:5px 12px;margin-bottom:12px;
+  }
+  .cam.grey{color:var(--muted);background:rgba(255,255,255,.04);border-color:var(--line)}
+  .chips{display:flex;gap:6px;flex-wrap:wrap}
+  .chip{
+    font-family:var(--mono);font-size:10px;letter-spacing:.06em;background:rgba(255,255,255,.05);
+    color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:3px 10px;white-space:nowrap;
+  }
+  .chip.hot{background:var(--accent-dim);color:var(--accent);border-color:rgba(127,243,208,.3)}
+
+  /* ---------------- TABLES ---------------- */
+  .tblwrap{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--panel);margin-bottom:16px}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  th{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);font-weight:600;background:rgba(255,255,255,.02)}
+  td.lead{font-weight:600;color:var(--ink);white-space:nowrap;width:17%}
+  td.mono{font-family:var(--mono);font-size:11px;color:var(--accent);line-height:1.9}
+  td.soft{color:var(--muted);line-height:1.65}
+  td.tag{width:22%;color:var(--muted);font-size:12px}
+
+  /* ---------------- LOGO BREAKDOWN ---------------- */
+  .logolab{display:grid;grid-template-columns:1.15fr .85fr;gap:30px;align-items:start;margin-top:26px}
+  .logo-stage{
+    border:1px solid var(--line);border-radius:16px;background:radial-gradient(70% 90% at 50% 45%,rgba(255,255,255,.045),transparent 70%),var(--panel);
+    padding:44px 26px;position:relative;min-height:330px;display:flex;align-items:center;justify-content:center;overflow:hidden;
+  }
+  .logo-stage svg{width:100%;height:auto;max-width:470px}
+  .logonote{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase;text-align:center;margin-top:18px}
+  .parts{display:flex;flex-direction:column;gap:12px}
+  .part{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--panel)}
+  .part .ph{display:flex;align-items:center;gap:12px;margin-bottom:7px}
+  .glyph{
+    width:32px;height:32px;flex:none;border-radius:8px;display:flex;align-items:center;justify-content:center;
+    font-family:var(--mono);font-weight:700;font-size:15px;background:rgba(255,255,255,.06);
+    border:1px solid var(--line-2);color:var(--ink);
+  }
+  .glyph.acc{background:var(--accent-dim);border-color:rgba(127,243,208,.4);color:var(--accent)}
+  .part .pn{font-size:13.5px;font-weight:600}
+  .part .pu{font-size:12px;color:var(--muted);line-height:1.6}
+  .part .pu b{color:var(--accent);font-weight:600}
+
+  /* ---------------- PAGES ---------------- */
+  .pages{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:26px}
+  .ptab{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--panel);transition:.2s}
+  .ptab .pth{font-family:var(--mono);font-size:12px;color:var(--ink)}
+  .ptab small{display:block;color:var(--dim);font-size:11px;margin-top:7px;line-height:1.5}
+  .ptab .cm{display:block;margin-top:10px;font-family:var(--mono);font-size:9.5px;color:var(--accent);letter-spacing:.05em}
+
+  /* ---------------- MOTION RULES ---------------- */
+  .rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+  .rule{border:1px solid var(--line);border-radius:12px;padding:18px 20px;background:var(--panel)}
+  .rule .rn{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--accent);margin-bottom:9px}
+  .rule h4{margin:0 0 8px;font-size:14px}
+  .rule p{margin:0;color:var(--muted);font-size:12.5px;line-height:1.7}
+
+  footer{
+    margin-top:80px;padding-top:28px;border-top:1px solid var(--line);
+    font-family:var(--mono);font-size:10.5px;color:var(--dim);letter-spacing:.12em;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+  }
+  footer b{color:var(--accent)}
+
+  @media(max-width:820px){
+    .logolab{grid-template-columns:1fr}
+    .wrap{padding:0 20px 100px}
+    .hero{padding:80px 0 64px}
+    td.lead,td.tag{white-space:normal}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <div class="hero-rings" aria-hidden="true">
+      <div class="r3"></div><div class="r2"></div><div class="r1"></div><div class="dot"></div>
+    </div>
+    <div class="eyebrow">Wireframe v2 · The Immersive Story</div>
+    <h1 class="title">One orbit.<br><em>Nine chapters.</em></h1>
+    <p class="lede">
+      The first version mapped sections to components. This version answers the harder question:
+      <strong>how do we make it feel like you're somewhere?</strong> The whole home page becomes a
+      single continuous camera journey around one object — and the logo, broken down, is the system
+      that drives it.
+    </p>
+    <div class="facts">
+      <div><b>31</b>components in repo</div>
+      <div><b>12</b>distinct jobs</div>
+      <div><b>1</b>continuous 3D world</div>
+      <div><b>9</b>letters = 9 chapters</div>
+    </div>
+  </header>
+
+  <!-- ============ THE BIG IDEA ============ -->
+  <h2 class="sec">01 — The core idea</h2>
+  <div class="bigidea">
+    <p class="q">The page is not a stack of sections. It is <span>an orbit</span> — one camera, one object, and every letter of ORBITVALE is a place you stop on the way round.</p>
+    <p>
+      Lusion works because the site is <em>one world</em> you fly through, not ten slides. Halden works because it behaves
+      like a well-edited magazine — restraint, big type, confident silence. We take the first's continuity and the
+      second's editorial control, and we bind them with the brand: the orbit ring in the logo becomes the scroll
+      progress ring, the planet "O" becomes the object we circle, and the stencil gaps in the wordmark become the
+      mask through which each chapter is revealed. Nothing is decorative — every animation is a position on the orbit.
+    </p>
+  </div>
+
+  <!-- ============ SCROLL STORY ============ -->
+  <h2 class="sec">02 — The scroll story</h2>
+  <p class="sec-sub">A single camera, nine places to land.</p>
+  <p class="sec-note">
+    Read top to bottom: this is the actual order of the home page, with the camera move that connects each scene
+    and the repo components that build it. One hero moment per viewport — never two shaders fighting.
+  </p>
+
+  <div class="acts">
+
+    <div class="act">
+      <div class="node filled"></div>
+      <div class="ano">Act 00 · Preloader</div>
+      <h3>The ring draws itself</h3>
+      <p>Black screen. A single hairline traces the orbit ellipse, the counter runs 00→100 in mono type, then the nine
+      letters of ORBITVALE assemble from particles along the ring and lock in with the swoosh passing behind and in
+      front of the wordmark — exactly as the logo layers it. Then the camera pushes through the ring and the site begins.</p>
+      <div class="cam">CAMERA · static → push through ring</div>
+      <div class="chips"><span class="chip hot">EZPZTypeTunnel</span><span class="chip">thinking-orbs (loader)</span><span class="chip">svt-follow-scroll (ring trace)</span></div>
+    </div>
+
+    <div class="act">
+      <div class="node filled"></div>
+      <div class="ano">Act I · The Object</div>
+      <h3>Hero — a planet we will circle</h3>
+      <p>We emerge inside a painted orbital system: a sun, faint concentric orbits, small bodies drifting. The "O" of the
+      wordmark has become the planet. Headline sits in the negative space; the accent dot is a real satellite on the ring.
+      Move the mouse and the whole system parallaxes — the first proof you're inside something, not looking at a picture.</p>
+      <div class="cam">CAMERA · inside the system, slow drift + pointer parallax</div>
+      <div class="chips"><span class="chip hot">OrbitalHeroSection</span><span class="chip">ParticleSphere</span></div>
+    </div>
+
+    <div class="act">
+      <div class="node"></div>
+      <div class="ano">Act II · The Signal</div>
+      <h3>Who we are — told in a line that draws itself</h3>
+      <p>The camera pulls back; the planet shrinks to a small sphere in the corner. The positioning statement writes
+      itself along a glowing path that threads three beats — who we are, what we build, who we build it for. This is the
+      quiet beat after the loud entry, and the first fully scroll-linked moment: scrub back and the line un-draws.</p>
+      <div class="cam">CAMERA · pull back, planet → corner anchor</div>
+      <div class="chips"><span class="chip hot">svt-follow-scroll</span><span class="chip">SingularityCore</span><span class="chip">ScrollHeroSection</span></div>
+    </div>
+
+    <div class="act">
+      <div class="node"></div>
+      <div class="ano">Act III · The Constellation</div>
+      <h3>What we do — services in orbit</h3>
+      <p>The planet returns to centre and six satellites rise into orbit around it — one per service. Hover pulls a
+      satellite out of orbit and expands its card; the rest keep circling behind it. Instead of a grid of boxes, the
+      services are literally the company's orbit. Scroll advances the rotation.</p>
+      <div class="cam">CAMERA · centred, orbit advances with scroll</div>
+      <div class="chips"><span class="chip hot">CareersValues → OrbitGrid</span><span class="chip">OrbitingCirclesGlobe</span></div>
+    </div>
+
+    <div class="act">
+      <div class="node"></div>
+      <div class="ano">Act IV · The Fleet</div>
+      <h3>Selected work — the wheel</h3>
+      <p>Drag the planet's ring and it becomes a drum of project cards; the wheel spins, the front card snaps into
+      focus with a title and a number. This is the main work browser — a physical object, not a carousel of slides.
+      Selected projects also surface as a 3D cover-flow shelf on the /work page.</p>
+      <div class="cam">CAMERA · horizontal, drag-driven drum</div>
+      <div class="chips"><span class="chip hot">WorksWheel</span><span class="chip">CoverFlow</span></div>
+    </div>
+
+    <div class="act">
+      <div class="node"></div>
+      <div class="ano">Act V · The Deep</div>
+      <h3>The deep-tech moment</h3>
+      <p>We fall toward the core and the shader takes over: an accretion disk rotates around a lensed black hole,
+      stars stretch as they're pulled in. This is the one "wow" frame on the page — copy sits at the edge, never over the
+      centre. Then the camera punches through and light streaks return us to normal space.</p>
+      <div class="cam">CAMERA · dive in → punch through</div>
+      <div class="chips"><span class="chip hot">BlackHoleVortex</span><span class="chip">EtchedAccretion (mono bg)</span><span class="chip">WarpTunnel (exit)</span></div>
+    </div>
+
+    <div class="act">
+      <div class="node"></div>
+      <div class="ano">Act VI · The Network</div>
+      <h3>Where we are — the globe</h3>
+      <p>Out of the hole, the camera settles on a dot-matrix Earth; arcs pulse between regions as delivery counters tick
+      up. "An IT company" becomes something you can see: reach. The globe then collapses into a single point of light.</p>
+      <div class="cam">CAMERA · pull to orbit, globe rotates</div>
+      <div class="chips"><span class="chip hot">GlobeCdn</span><span class="chip">OrbitingCirclesGlobe</span></div>
+    </div>
+
+    <div class="act">
+      <div class="node"></div>
+      <div class="ano">Act VII · The Arrival</div>
+      <h3>Contact — land somewhere new</h3>
+      <p>Stars streak into a tunnel and the CTA emerges at the end of it: start a project. Accelerates on hover. The
+      footer is deliberately flat, quiet and still — a landing strip after the flight. The orbit ring completes and the
+      logo sits whole again.</p>
+      <div class="cam">CAMERA · accelerate to light speed, land</div>
+      <div class="chips"><span class="chip hot">LightSpeed</span><span class="chip">LunarGravityCard (form card)</span></div>
+    </div>
+
+  </div>
+
+  <!-- ============ REFERENCE TEARDOWN ============ -->
+  <h2 class="sec">03 — What the references actually do</h2>
+  <p class="sec-sub">Two winners, two different machines.</p>
+  <p class="sec-note">
+    Lusion and Halden win awwwards for opposite reasons. Knowing which lever we're pulling at each moment is what stops
+    the site becoming a pile of effects.
+  </p>
+  <div class="tblwrap">
+    <table>
+      <thead>
+        <tr><th></th><th>Lusion</th><th>Halden</th><th>Orbitvale — our blend</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="lead">Entry</td><td class="soft">Preloader with % counter → drops you into a full-bleed WebGL world</td><td class="soft">Wordmark letters stagger in, no loader</td><td class="soft">Ring draws + counter, letters assemble from particles, camera through ring</td></tr>
+        <tr><td class="lead">Hero</td><td class="soft">The 3D scene <em>is</em> the brand</td><td class="soft">Type-led; video grows out of the headline</td><td class="soft">Type-led headline sitting inside a live orbital scene</td></tr>
+        <tr><td class="lead">Scroll</td><td class="soft">Camera flies through one continuous world</td><td class="soft">Vertical editorial chapters, sticky titles</td><td class="soft">One continuous camera orbit, nine chapters — hybrid</td></tr>
+        <tr><td class="lead">Work</td><td class="soft">Horizontal drag gallery w/ image distortion</td><td class="soft">Full-width numbered project stories</td><td class="soft">Drag-driven wheel on home; cover-flow shelf on /work; Halden-style stories</td></tr>
+        <tr><td class="lead">Signature motion</td><td class="soft">Shader distortion, particle fields, sound</td><td class="soft">Split-flap counters, text scramble, wordmark wipes</td><td class="soft">Orbit ring as scroll progress; letters as waypoints; both counter styles</td></tr>
+        <tr><td class="lead">Transitions</td><td class="soft">In-world camera moves</td><td class="soft">Wordmark wipe between pages</td><td class="soft">Warp tunnel between routes; ring persists across pages</td></tr>
+        <tr><td class="lead">Tone</td><td class="soft">Bold, technical, playful</td><td class="soft">Quiet, editorial, confident</td><td class="soft">Bold and technical, but paced with Halden restraint</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ============ SHARED DNA ============ -->
+  <h2 class="sec">04 — Where the references meet our components</h2>
+  <p class="sec-sub">The repo already speaks both languages.</p>
+  <p class="sec-note">
+    The useful discovery: almost every move Lusion and Halden make has a ready-made equivalent already in prompts.txt.
+    We're not inventing the vocabulary — we're casting it.
+  </p>
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th>Reference move</th><th>What it does</th><th>Our component</th></tr></thead>
+      <tbody>
+        <tr><td class="lead">Lusion · the world</td><td class="soft">Persistent 3D scene you fly through</td><td class="mono">OrbitalHeroSection · ParticleSphere</td></tr>
+        <tr><td class="lead">Lusion · the dive</td><td class="soft">Camera plunges into a vortex</td><td class="mono">BlackHoleVortex · EtchedAccretion</td></tr>
+        <tr><td class="lead">Lusion · the streak</td><td class="soft">Light streaks on transitions</td><td class="mono">LightSpeed · WarpTunnel · warp-drive-shader</td></tr>
+        <tr><td class="lead">Lusion · the gallery</td><td class="soft">Drag a shelf of projects</td><td class="mono">WorksWheel · CoverFlow · CurvedLensCarousel</td></tr>
+        <tr><td class="lead">Halden · the magazine</td><td class="soft">Big type, generous silence</td><td class="mono">Typography system + CareersValues</td></tr>
+        <tr><td class="lead">Halden · the counter</td><td class="soft">Stats flip into place</td><td class="mono">Animated counters inside GlobeCdn section</td></tr>
+        <tr><td class="lead">Halden · the wordmark</td><td class="soft">Letters animate on arrival</td><td class="mono">EZPZTypeTunnel · NeonLoop</td></tr>
+        <tr><td class="lead">Halden · the process</td><td class="soft">Sticky timeline of phases</td><td class="mono">SpiralAnimation · svt-follow-scroll</td></tr>
+        <tr><td class="lead">Halden · the 404</td><td class="soft">A charming dead-end</td><td class="mono">BottleNotFound</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ============ DUPLICATES & TWISTS ============ -->
+  <h2 class="sec">05 — 31 components, 12 real jobs</h2>
+  <p class="sec-sub">Half the repo does the same thing twice. That's an asset.</p>
+  <p class="sec-note">
+    You were right that many prompts overlap. Rather than pick one and bin the rest, we give each family a distinct
+    role and a distinct scale — so the same underlying tech reads as four different experiences instead of one effect
+    used four times.
+  </p>
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th>Family</th><th>Members</th><th>The twist — how each is cast differently</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="lead">Wormholes</td>
+          <td class="mono">WarpTunnel · LightSpeed (R3F) · LightSpeed (canvas) · warp-drive-shader</td>
+          <td class="soft">WarpTunnel = <b>page transition</b> between routes. LightSpeed = <b>the CTA</b> at the end. warp-drive-shader = a <b>thin 1-line divider</b> between sections. The canvas LightSpeed = <b>hero exit</b> only. Same family, four scales.</td>
+        </tr>
+        <tr>
+          <td class="lead">Orbit &amp; sphere</td>
+          <td class="mono">OrbitalHeroSection · OrbitalSphereBackground · ParticleSphere · sphere · orbiting-circles-02</td>
+          <td class="soft">Hero scene / ambient page bg / work gallery / small in-card accent / services orbit. One motif, five distances from camera.</td>
+        </tr>
+        <tr>
+          <td class="lead">Black holes</td>
+          <td class="mono">BlackHoleVortex · EtchedAccretion</td>
+          <td class="soft">Vortex = the <b>loud</b> Act V moment. EtchedAccretion = a <b>monochrome, low-contrast</b> backdrop behind the capabilities copy — present but never competing.</td>
+        </tr>
+        <tr>
+          <td class="lead">Carousels</td>
+          <td class="mono">WorksWheel · CoverFlow · ArcCarousel · CurvedLensCarousel · OrbitFlipSlider</td>
+          <td class="soft">Wheel = all work (drag). CoverFlow = featured (shelf). Arc = testimonials. CurvedLens = team portraits. OrbitFlip = client logos. Five carousels, five different content types — never two on screen.</td>
+        </tr>
+        <tr>
+          <td class="lead">Typographic FX</td>
+          <td class="mono">EZPZTypeTunnel · NeonLoop · ShaderAnimation · ChromeArcs</td>
+          <td class="soft">TypeTunnel = wordmark reveal (once, at load). NeonLoop = section titles on /work. ShaderAnimation = faint glyph field behind /about. ChromeArcs = a single glossy accent band before the CTA.</td>
+        </tr>
+        <tr>
+          <td class="lead">Cards &amp; grids</td>
+          <td class="mono">CareersValues · LunarGravityCard</td>
+          <td class="soft">CareersValues = the services orbit-grid. LunarGravityCard = one featured card on /contact. Different weights: many small vs one heavy.</td>
+        </tr>
+        <tr>
+          <td class="lead">Networks</td>
+          <td class="mono">GlobeCdn · OrbitingCirclesGlobe</td>
+          <td class="soft">GlobeCdn = offices globe on home. OrbitingCircles = a capability ring inside the /services header.</td>
+        </tr>
+        <tr>
+          <td class="lead">Quiet utility</td>
+          <td class="mono">BottleNotFound · thinking-orbs · SpiralAnimation · svt-follow-scroll · ScrollHeroSection · HalftoneNebula</td>
+          <td class="soft">404 / preloader pill / company timeline / narrative line / intro variant / optional nebula backdrop on /about. These carry the "restraint" budget so the loud ones can be loud.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ============ LOGO BREAKDOWN ============ -->
+  <h2 class="sec">06 — Breaking the logo into a system</h2>
+  <p class="sec-sub">The mark is a toolkit, not a picture.</p>
+  <p class="sec-note">
+    The Orbitvale logo is unusually rich for a graphic — a stencil wordmark with a layered swoosh. Pulled apart, it
+    gives us the ring, the planet, the stencil mask, the data glyph and the direction arrow. That's five recurring
+    motifs that make the whole site feel authored rather than assembled.
+  </p>
+
+  <div class="logolab">
+    <div>
+      <div class="logo-stage">
+        <svg viewBox="0 0 620 260" role="img" aria-label="Orbitvale logo breakdown">
+          <!-- orbit ellipse back half -->
+          <ellipse cx="310" cy="130" rx="268" ry="86" transform="rotate(-13 310 130)"
+                   fill="none" stroke="rgba(127,243,208,.55)" stroke-width="2" stroke-dasharray="420 900"/>
+          <!-- wordmark -->
+          <text x="310" y="146" text-anchor="middle" font-family="ui-monospace,Menlo,Consolas,monospace"
+                font-size="58" font-weight="700" letter-spacing="9" fill="#f4f4f6">ORBITVALE</text>
+          <!-- orbit front half -->
+          <ellipse cx="310" cy="130" rx="268" ry="86" transform="rotate(-13 310 130)"
+                   fill="none" stroke="rgba(127,243,208,.85)" stroke-width="2" stroke-dasharray="0 900" stroke-dashoffset="-420"/>
+          <!-- accent satellite -->
+          <circle cx="572" cy="72" r="5" fill="#7ff3d0"/>
+          <circle cx="572" cy="72" r="11" fill="none" stroke="rgba(127,243,208,.35)"/>
+          <!-- callout ticks -->
+          <line x1="112" y1="200" x2="112" y2="232" stroke="rgba(255,255,255,.3)" stroke-width="1"/>
+          <circle cx="112" cy="200" r="3" fill="#ffb86b"/>
+          <line x1="310" y1="86" x2="310" y2="52" stroke="rgba(255,255,255,.3)" stroke-width="1"/>
+          <circle cx="310" cy="86" r="3" fill="#7ff3d0"/>
+          <line x1="500" y1="196" x2="500" y2="232" stroke="rgba(255,255,255,.3)" stroke-width="1"/>
+          <circle cx="500" cy="196" r="3" fill="#7ff3d0"/>
+        </svg>
+      </div>
+      <div class="logonote">The swoosh sits in two layers — behind the O·R·B and in front of the V·A·L·E</div>
+    </div>
+
+    <div class="parts">
+      <div class="part">
+        <div class="ph"><div class="glyph acc">◯</div><div class="pn">The ring</div></div>
+        <div class="pu">Becomes <b>scroll progress</b> — a hairline ellipse that fills as you travel the page, pinned to the edge of the viewport. Same shape, same tilt (−13°), everywhere.</div>
+      </div>
+      <div class="part">
+        <div class="ph"><div class="glyph">O</div><div class="pn">The planet</div></div>
+        <div class="pu">The open "O" is a sphere. It's the <b>object of the whole home page</b> — the hero scene orbits it, services orbit it, the wheel is built from its ring. One object, nine chapters.</div>
+      </div>
+      <div class="part">
+        <div class="ph"><div class="glyph">≡</div><div class="pn">The stencil slots</div></div>
+        <div class="pu">The gaps in the letters (dashed E, slit B, open O) are a <b>mask language</b>. Sections reveal through letter-shaped cut-outs; scan-lines use the same rhythm. It's the brand's texture.</div>
+      </div>
+      <div class="part">
+        <div class="ph"><div class="glyph acc">Λ</div><div class="pn">The crossing slash</div></div>
+        <div class="pu">The crossbar-less "A" and the "V" read as a <b>vector / velocity mark</b>. Used as the scroll-down cue, the next-project arrow, and the play button on the showreel.</div>
+      </div>
+      <div class="part">
+        <div class="ph"><div class="glyph">✳</div><div class="pn">The layers</div></div>
+        <div class="pu">The swoosh passing front-and-back is a <b>depth rule</b>: in the hero, satellites must occlude the ring when they pass behind it. This small correctness is what separates "3D" from "3D <em>feeling</em>".</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ PAGES ============ -->
+  <h2 class="sec">07 — The rest of the site</h2>
+  <p class="sec-sub">Secondary pages de-escalate on purpose.</p>
+  <p class="sec-note">
+    A site that is loud everywhere is exhausting. The home page is the flight; every other page is a room you're
+    standing in. They share the same type, the same ring, the same palette — but they breathe.
+  </p>
+
+  <div class="pages">
+    <div class="ptab"><div class="pth">/work</div><small>Cover-flow shelf of projects + Halden-style full-width stories</small><span class="cm">CoverFlow · NeonLoop</span></div>
+    <div class="ptab"><div class="pth">/work/[slug]</div><small>Full-bleed hero image, result counters, next-project via warp</small><span class="cm">GlobeCdn counters · WarpTunnel</span></div>
+    <div class="ptab"><div class="pth">/services</div><small>Orbit-accordion: rows expand, arc carousel swaps the art</small><span class="cm">ArcCarousel · OrbitingCircles</span></div>
+    <div class="ptab"><div class="pth">/about</div><small>Ambient sphere bg, spiral timeline, quiet team grid</small><span class="cm">OrbitalSphereBackground · SpiralAnimation</span></div>
+    <div class="ptab"><div class="pth">/contact</div><small>Flat, fast form. One lunar-gravity card as the hero of the page</small><span class="cm">LunarGravityCard</span></div>
+    <div class="ptab"><div class="pth">/404</div><small>Message in a bottle drifting on waves — pure SVG, no canvas</small><span class="cm">BottleNotFound</span></div>
+    <div class="ptab"><div class="pth">Transitions</div><small>Every route change flies through the ring; the tile persists</small><span class="cm">WarpTunnel</span></div>
+    <div class="ptab"><div class="pth">Preloader</div><small>Shown once per session, not on every navigation</small><span class="cm">ring trace · counter</span></div>
+  </div>
+
+  <!-- ============ MOTION RULES ============ -->
+  <h2 class="sec">08 — Rules that make it award-grade</h2>
+  <div class="rules">
+    <div class="rule">
+      <div class="rn">RULE 01</div>
+      <h4>One hero per viewport</h4>
+      <p>Never two competing shaders or two 3D canvases visible at once. The eye needs a single subject or it reads as noise.</p>
+    </div>
+    <div class="rule">
+      <div class="rn">RULE 02</div>
+      <h4>Scroll is the only timeline</h4>
+      <p>One master scroll progress drives the camera. Every chapter listens to the same clock, so nothing ever gets out of sync.</p>
+    </div>
+    <div class="rule">
+      <div class="rn">RULE 03</div>
+      <h4>Loud → quiet → loud</h4>
+      <p>Pacing is the whole trick. Hero (loud) → statement (quiet) → services (medium) → black hole (loud) → globe (medium) → CTA (loud). Halden's editorial restraint, Lusion's spectacle.</p>
+    </div>
+    <div class="rule">
+      <div class="rn">RULE 04</div>
+      <h4>Cut the canvas when it's gone</h4>
+      <p>Every R3F canvas mounts on approach and unmounts when off-screen. Cap DPR at 1.5–2. This is what keeps a 9-chapter 3D page under a bearable load time.</p>
+    </div>
+    <div class="rule">
+      <div class="rn">RULE 05</div>
+      <h4>Reduced motion is a first-class path</h4>
+      <p>If <code style="font-family:var(--mono);color:var(--accent)">prefers-reduced-motion</code> is set, the story degrades to static frames + opacity fades — still beautiful, zero motion. Several components already ship this hook.</p>
+    </div>
+    <div class="rule">
+      <div class="rn">RULE 06</div>
+      <h4>Sound is off by default</h4>
+      <p>A tiny ambient bed with a visible mute, like Lusion. Adds an enormous amount of "premium" for the people who opt in, and costs nothing for those who don't.</p>
+    </div>
+    <div class="rule">
+      <div class="rn">RULE 07</div>
+      <h4>Every frame earns its bytes</h4>
+      <p>Text loads instantly; the 3D fills in behind it. No blocking spinner on a page the user can already read. That single decision is the difference between "impressive" and "usable".</p>
+    </div>
+  </div>
+
+  <!-- ============ BUILD ============ -->
+  <h2 class="sec">09 — Build order</h2>
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th>Phase</th><th>What gets built</th><th>Why in this order</th></tr></thead>
+      <tbody>
+        <tr><td class="lead">0 · Foundation</td><td class="soft">Next.js + Tailwind + shadcn, tokens, fonts, logo SVGs (full mark, ring-only, letter glyphs), nav/footer shell</td><td class="soft">Everything downstream depends on the tokens and the logo assets. Get the system right before a single shader.</td></tr>
+        <tr><td class="lead">1 · Preloader + hero</td><td class="soft">Ring trace, counter, wordmark assembly, OrbitalHeroSection</td><td class="soft">First impression sets the bar. If the entry sells the idea, the rest can be judged against it.</td></tr>
+        <tr><td class="lead">2 · Scroll spine</td><td class="soft">Master scroll clock, narrative line, statement section</td><td class="soft">The spine is the architecture. Build the timeline before the content that rides it.</td></tr>
+        <tr><td class="lead">3 · Core chapters</td><td class="soft">Services orbit, works wheel, globe + counters</td><td class="soft">The content the business actually needs, on the motion system that already works.</td></tr>
+        <tr><td class="lead">4 · Signature frames</td><td class="soft">Black hole, light-speed CTA, route transitions</td><td class="soft">The showpieces go in once the foundation is proven — they're the most expensive and most fragile.</td></tr>
+        <tr><td class="lead">5 · Secondary pages</td><td class="soft">Work, case study, services, about, contact, 404</td><td class="soft">Now the shell and components are mature; these pages assemble fast.</td></tr>
+        <tr><td class="lead">6 · Polish + ship</td><td class="soft">Reduced-motion, mobile, perf budget, SEO, OG images, deploy</td><td class="soft">The pass that turns "demo" into something you'd genuinely enter for awwwards.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    <span>ORBITVALE · WIREFRAME <b>v2</b> · THE IMMERSIVE STORY</span>
+    <span>NEXT: APPROVE THE STORY → BUILD PHASE 0</span>
+  </footer>
+</div>
+</body>
+</html>

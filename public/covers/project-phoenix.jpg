@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 360" width="560" height="360">
+  <defs>
+    <radialGradient id="bg" cx="30%" cy="60%" r="80%">
+      <stop offset="0%" stop-color="#1a0d08"/>
+      <stop offset="100%" stop-color="#08090b"/>
+    </radialGradient>
+    <radialGradient id="glow1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff6230" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#ff6230" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffb86b" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#ffb86b" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blur1"><feGaussianBlur stdDeviation="18"/></filter>
+    <filter id="blur2"><feGaussianBlur stdDeviation="8"/></filter>
+  </defs>
+  <rect width="560" height="360" fill="url(#bg)"/>
+  <!-- flame glow -->
+  <ellipse cx="200" cy="240" rx="140" ry="90" fill="url(#glow1)" filter="url(#blur1)"/>
+  <ellipse cx="200" cy="200" rx="70" ry="50" fill="url(#glow2)" filter="url(#blur2)"/>
+  <!-- wing lines -->
+  <path d="M 80 300 Q 200 160 340 220 Q 420 250 480 200" stroke="#ff6230" stroke-width="1.5" fill="none" stroke-opacity="0.6"/>
+  <path d="M 60 320 Q 180 190 320 240 Q 400 265 460 220" stroke="#ffb86b" stroke-width="0.8" fill="none" stroke-opacity="0.3"/>
+  <path d="M 100 280 Q 220 150 360 210" stroke="#ffffff" stroke-width="0.5" fill="none" stroke-opacity="0.15"/>
+  <!-- grid lines -->
+  <line x1="0" y1="0" x2="560" y2="360" stroke="#ff6230" stroke-width="0.3" stroke-opacity="0.08"/>
+  <line x1="560" y1="0" x2="0" y2="360" stroke="#ff6230" stroke-width="0.3" stroke-opacity="0.08"/>
+  <!-- label -->
+  <text x="32" y="52" font-family="ui-monospace,monospace" font-size="9" letter-spacing="0.25em" fill="#ff6230" fill-opacity="0.7" text-transform="uppercase">PROJECT PHOENIX</text>
+  <text x="32" y="330" font-family="ui-monospace,monospace" font-size="8" letter-spacing="0.18em" fill="#ffffff" fill-opacity="0.25">01 / SAAS PLATFORM</text>
+</svg>

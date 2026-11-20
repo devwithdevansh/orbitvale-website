@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 220" fill="none" aria-label="Orbitvale">
+  <defs>
+    <linearGradient id="ov-grad" x1="10%" y1="0%" x2="90%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="65%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#7ff3d0"/>
+    </linearGradient>
+    <linearGradient id="ring-glow" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.3"/>
+      <stop offset="40%" stop-color="#ffffff" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#7ff3d0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Aerodynamic Sweeping Orbit Swoosh -->
+  <path d="M 280 82 C 340 50 430 30 520 32 C 600 34 655 52 660 72 C 663 85 640 98 595 106 C 540 116 460 110 395 100 C 345 92 300 88 280 82 Z" fill="url(#ring-glow)"/>
+  <path d="M 480 138 C 420 170 330 190 240 188 C 160 186 105 168 100 148 C 97 135 120 122 165 114 C 220 104 300 110 365 120 C 415 128 460 132 480 138 Z" fill="url(#ring-glow)"/>
+
+  <!-- Wordmark Stencil Characters -->
+  <g fill="url(#ov-grad)">
+    <!-- O -->
+    <path d="M 125 85 C 105 85 92 97 92 110 C 92 123 105 135 125 135 L 145 135 C 165 135 178 123 178 110 C 178 97 165 85 145 85 Z M 125 96 L 145 96 C 158 96 166 102 166 110 C 166 118 158 124 145 124 L 125 124 C 112 124 104 118 104 110 C 104 102 112 96 125 96 Z"/>
+    <!-- R -->
+    <path d="M 194 86 L 230 86 C 243 86 252 93 252 104 C 252 113 245 119 235 121 L 254 135 L 240 135 L 223 122 L 206 122 L 206 135 L 194 135 Z M 206 97 L 228 97 C 236 97 240 100 240 104 C 240 108 236 112 228 112 L 206 112 Z"/>
+    <!-- B -->
+    <path d="M 266 86 L 298 86 C 309 86 317 91 317 99 C 317 104 313 108 306 110 C 315 112 320 117 320 124 C 320 132 311 135 299 135 L 266 135 Z M 278 96 L 296 96 C 303 96 306 98 306 102 C 306 106 303 108 296 108 L 278 108 Z M 278 113 L 298 113 C 305 113 309 116 309 120 C 309 124 305 126 298 126 L 278 126 Z"/>
+    <!-- I -->
+    <path d="M 335 86 L 347 86 L 347 135 L 335 135 Z"/>
+    <!-- T -->
+    <path d="M 360 86 L 406 86 L 406 97 L 389 97 L 389 135 L 377 135 L 377 97 L 360 97 Z"/>
+    <!-- V -->
+    <path d="M 418 86 L 431 86 L 446 125 L 461 86 L 474 86 L 452 135 L 440 135 Z"/>
+    <!-- A -->
+    <path d="M 495 86 L 507 86 L 526 135 L 513 135 L 508 123 L 493 123 L 488 135 L 476 135 Z M 497 113 L 504 113 L 501 100 Z"/>
+    <!-- L -->
+    <path d="M 540 86 L 552 86 L 552 124 L 576 124 L 576 135 L 540 135 Z"/>
+    <!-- E -->
+    <path d="M 590 86 L 632 86 L 624 96 L 590 96 Z"/>
+    <path d="M 590 105 L 626 105 L 620 115 L 590 115 Z"/>
+    <path d="M 590 124 L 636 124 L 628 135 L 590 135 Z"/>
+  </g>
+
+  <!-- Accent Satellite -->
+  <circle cx="658" cy="72" r="3.5" fill="#7ff3d0"/>
+  <circle cx="658" cy="72" r="8" stroke="#7ff3d0" stroke-width="1" opacity="0.4"/>
+</svg>
