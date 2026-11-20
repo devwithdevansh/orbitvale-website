@@ -20,6 +20,22 @@
   --ring-tilt: -13deg;
 }
 
+/* ── Light block theme tokens (Sections 04–06) ────────────────────────── */
+.theme-light, [data-theme="light"] {
+  color-scheme: light;
+  --bg: #f4f5f7;
+  --panel: #ffffff;
+  --panel-2: #e9eef6;
+  --line: #cfd3da;
+  --line-2: #b4bdcc;
+  --ink: #0c0e12;
+  --muted: #5d6573;
+  --dim: #88909e;
+  --accent: #0a8f6a;
+  --accent-2: #d97706;
+  --accent-dim: rgba(10, 143, 106, 0.12);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -117,4 +133,17 @@ html {
   html { scroll-behavior: auto; }
   ::view-transition-old(root),
   ::view-transition-new(root) { animation: none; }
+}
+
+
+/* ── Ring expansion page transition (Lusion ending) ──────────────────────── */
+@keyframes expandRing {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.95;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(85);
+    opacity: 1;
+  }
 }

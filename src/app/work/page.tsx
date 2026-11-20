@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { WorksWheel } from '@/components/WorksWheel';
 
 export const metadata: Metadata = {
   title: 'Work — Orbitvale',
@@ -77,10 +78,18 @@ export default function WorkPage() {
           Products built<br />
           <span className="text-ink/40">for orbit.</span>
         </h1>
-        <p className="mb-20 max-w-xl text-lg leading-relaxed text-muted">
+        <p className="mb-14 max-w-xl text-lg leading-relaxed text-muted">
           Six case studies across SaaS, infrastructure, analytics, and Web3.
           Each one starts with a business centre of gravity — everything else orbits that.
         </p>
+
+        {/* 3D Wheel Showcase */}
+        <div className="mb-20">
+          <p className="mb-4 font-mono text-[10px] uppercase tracking-[0.22em] text-dim">
+            Interactive Shelf · Drag to browse
+          </p>
+          <WorksWheel />
+        </div>
 
         {/* Project list — editorial numbered rows */}
         <div className="space-y-0">

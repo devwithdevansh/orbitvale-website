@@ -3,6 +3,20 @@
 import { useEffect, useRef, useState } from 'react';
 import { clamp } from '@/lib/utils';
 
+const MANIFESTO_WORDS = [
+  { word: 'Every', isAccent: false },
+  { word: 'business', isAccent: false },
+  { word: 'has', isAccent: false },
+  { word: 'gravity.', isAccent: false },
+  { word: 'We', isAccent: false },
+  { word: 'build', isAccent: false },
+  { word: 'what', isAccent: false },
+  { word: 'keeps', isAccent: false },
+  { word: 'it', isAccent: false },
+  { word: 'in', isAccent: false },
+  { word: 'orbit.', isAccent: true }, // The Halden italic accent move
+];
+
 const BEATS = [
   { label: 'Who we are', text: 'An IT company that builds systems you can feel.' },
   { label: 'What we build', text: 'Immersive products, design systems, and platforms.' },
@@ -10,25 +24,24 @@ const BEATS = [
 ];
 
 interface StatementSectionProps {
-  /**
-   * Global page scroll progress (0→1) from the master ScrollClock.
-   * When provided, path drawing is driven by the shared clock instead of a
-   * local scroll listener. Falls back to a local listener when omitted.
-   */
   globalProgress?: number;
 }
 
 /**
- * Act II — The Signal.
- * Positioning statement writes itself along a glowing path as you scroll.
+ * Section 02 · Manifesto (Halden Pinned Text + Italic Accent)
+ *
+ * Pinned headline:
+ * "Every business has gravity. We build what keeps it in orbit."
+ * Words light up progressively as you scroll.
+ * The word "orbit." is styled in high-contrast Georgia italic serif with mint accent.
  */
 export function StatementSection({ globalProgress }: StatementSectionProps) {
   const ref = useRef<HTMLElement>(null);
   const pathRef = useRef<SVGPathElement>(null);
   const lengthRef = useRef(0);
-  const [local, setLocal] = useState(0);
+  const [scrollP, setScrollP] = useState(0);
 
-  // ── Init: measure SVG path length once on mount ──────────────────────────
+  // Measure path length once
   useEffect(() => {
     const path = pathRef.current;
     if (!path) return;
@@ -38,97 +51,119 @@ export function StatementSection({ globalProgress }: StatementSectionProps) {
     path.style.strokeDashoffset = String(length);
   }, []);
 
-  // ── Core update function (BCR-based, works in both modes) ───────────────
-  const computeAndApply = () => {
+  const compute = () => {
     const el = ref.current;
-    const path = pathRef.current;
-    if (!el || !path || !lengthRef.current) return;
-
+    if (!el) return;
     const rect = el.getBoundingClientRect();
-    const view = window.innerHeight;
-    const start = view * 0.85;
-    const end = view * 0.2;
-    const p = clamp((start - rect.top) / (start - end), 0, 1);
-    setLocal(p);
-    // Direct DOM write for the SVG stroke — bypasses React for jank-free draw
-    path.style.strokeDashoffset = String(lengthRef.current * (1 - p));
+    const viewH = window.innerHeight;
+    const start = viewH * 0.9;
+    const end = viewH * 0.15;
+    const p = clamp((start - rect.top) / (start - end + rect.height * 0.5), 0, 1);
+    setScrollP(p);
+
+    if (pathRef.current && lengthRef.current) {
+      pathRef.current.style.strokeDashoffset = String(lengthRef.current * (1 - p));
+    }
   };
 
-  // ── Driven by master clock when globalProgress is provided ───────────────
   useEffect(() => {
-    if (globalProgress === undefined) return;
-    computeAndApply();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [globalProgress]);
-
-  // ── Fallback: local scroll listener (standalone / /services page) ────────
-  useEffect(() => {
-    if (globalProgress !== undefined) return; // master clock handles it
-
-    const update = () => computeAndApply();
-    update();
-    window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update, { passive: true });
+    if (globalProgress !== undefined) {
+      compute();
+      return;
+    }
+    const onScroll = () => compute();
+    compute();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
     return () => {
-      window.removeEventListener('scroll', update);
-      window.removeEventListener('resize', update);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [globalProgress]);
 
   return (
-    <section ref={ref} className="relative px-6 py-32 md:py-44">
-      <div className="mx-auto max-w-4xl">
-        <p className="mb-6 font-mono text-[11px] uppercase tracking-[0.26em] text-dim">
-          Act II · The Signal
-        </p>
-        <h2 className="mb-16 max-w-[18ch] text-3xl font-semibold tracking-tight text-ink md:text-5xl">
-          Digital experiences that{' '}
-          <span className="text-accent">orbit</span> your business goals.
-        </h2>
+    <section
+      ref={ref}
+      className="relative px-6 py-32 md:py-48 max-w-6xl mx-auto"
+      id="chapter-manifesto"
+    >
+      {/* Chapter Indicator */}
+      <div className="mb-8 font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
+        Act 02 · The Manifesto
+      </div>
 
-        <div className="relative">
-          <svg
-            className="pointer-events-none absolute -left-4 top-0 hidden h-full w-16 md:block"
-            viewBox="0 0 40 420"
-            preserveAspectRatio="none"
-            aria-hidden="true"
-          >
-            <path
-              ref={pathRef}
-              d="M20 0 C20 80, 8 140, 20 210 C32 280, 20 340, 20 420"
-              fill="none"
-              stroke="#7ff3d0"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-          </svg>
+      {/* Pinned Big Manifesto Headline */}
+      <h2
+        className="font-display text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold leading-[1.12] tracking-tight text-ink mb-20 max-w-4xl"
+        aria-label="Every business has gravity. We build what keeps it in orbit."
+      >
+        {MANIFESTO_WORDS.map((item, i) => {
+          // Calculate when each word lights up along scroll progress
+          const wordThreshold = (i + 0.3) / MANIFESTO_WORDS.length;
+          const isLit = scrollP >= wordThreshold;
 
-          <div className="space-y-14 md:pl-16">
-            {BEATS.map((beat, i) => {
-              const threshold = (i + 0.35) / BEATS.length;
-              const visible = local >= threshold;
-              return (
-                <div
-                  key={beat.label}
-                  className="transition-all duration-700"
-                  style={{
-                    opacity: visible ? 1 : 0.18,
-                    transform: `translateY(${visible ? 0 : 18}px)`,
-                  }}
-                >
-                  <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-accent">
-                    {String(i + 1).padStart(2, '0')} · {beat.label}
-                  </div>
-                  <p className="max-w-xl text-lg leading-relaxed text-muted md:text-xl">
-                    {beat.text}
-                  </p>
+          if (item.isAccent) {
+            return (
+              <span
+                key={i}
+                className="inline-block transition-all duration-500"
+                style={{
+                  fontFamily: 'Georgia, serif',
+                  fontStyle: 'italic',
+                  fontWeight: 500,
+                  color: isLit ? '#7ff3d0' : 'rgba(255,255,255,0.22)',
+                  transform: isLit ? 'translateY(0)' : 'translateY(4px)',
+                }}
+              >
+                {item.word}{' '}
+              </span>
+            );
+          }
+
+          return (
+            <span
+              key={i}
+              className="inline-block transition-all duration-400"
+              style={{
+                color: isLit ? '#f2f4f7' : 'rgba(255,255,255,0.22)',
+                transform: isLit ? 'translateY(0)' : 'translateY(4px)',
+              }}
+            >
+              {item.word}{' '}
+            </span>
+          );
+        })}
+      </h2>
+
+      {/* Three Positioning Beats with Glowing Vertical Line */}
+      <div className="relative mt-20 pt-10 border-t border-line/40">
+        <div className="grid gap-12 md:grid-cols-3">
+          {BEATS.map((beat, i) => {
+            const beatThreshold = (i + 0.5) / 3;
+            const visible = scrollP >= beatThreshold * 0.7;
+
+            return (
+              <div
+                key={beat.label}
+                className="transition-all duration-700"
+                style={{
+                  opacity: visible ? 1 : 0.25,
+                  transform: `translateY(${visible ? 0 : 16}px)`,
+                }}
+              >
+                <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.22em] text-accent">
+                  {String(i + 1).padStart(2, '0')} · {beat.label}
                 </div>
-              );
-            })}
-          </div>
+                <p className="text-base md:text-lg leading-relaxed text-muted">
+                  {beat.text}
+                </p>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
   );
 }
+
+export default StatementSection;

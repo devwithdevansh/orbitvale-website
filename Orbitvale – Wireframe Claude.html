@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Orbitvale – Wireframe v2</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#07080a;--panel:#101216;--line:#2a2e36;--fg:#f2f4f7;--mut:#8b93a1;--acc:#7ff3d0;color-scheme:dark}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f4f5f7;--panel:#fff;--line:#cfd3da;--fg:#0c0e12;--mut:#5d6573;--acc:#0a8f6a;color-scheme:light}}
+:root[data-theme="light"]{--bg:#f4f5f7;--panel:#fff;--line:#cfd3da;--fg:#0c0e12;--mut:#5d6573;--acc:#0a8f6a;color-scheme:light}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{padding:18px 20px 6px;max-width:1200px;margin:auto}
+h1{margin:0;font-size:20px;letter-spacing:.18em}header p{margin:4px 0 0;color:var(--mut);font-size:13px}
+.wrap{display:grid;grid-template-columns:210px 1fr;gap:16px;max-width:1200px;margin:auto;padding:12px 20px 40px}
+nav{display:flex;flex-direction:column;gap:6px}
+nav button{all:unset;cursor:pointer;padding:9px 12px;border:1px solid var(--line);border-radius:8px;color:var(--mut);font-size:13px;display:flex;align-items:center;gap:8px}
+nav button b{color:var(--acc)}nav button i{margin-left:auto;width:10px;height:10px;border-radius:50%;border:1px solid var(--mut)}
+nav button i.l{background:#e9eef6}nav button i.d{background:#000}
+nav button.on{background:var(--panel);color:var(--fg);border-color:var(--acc)}
+.main{min-width:0}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px;flex-wrap:wrap}
+.tag{font-size:12px;color:var(--acc);letter-spacing:.1em;text-transform:uppercase}
+h2{margin:2px 0 0;font-size:22px}h2 em{font-size:11px;font-style:normal;border:1px solid var(--acc);color:var(--acc);border-radius:10px;padding:1px 8px;margin-left:8px;vertical-align:middle;letter-spacing:.08em}
+.btns button{all:unset;cursor:pointer;padding:7px 12px;border:1px solid var(--line);border-radius:8px;font-size:13px;margin-left:6px;background:var(--panel)}
+.btns button:hover{border-color:var(--acc)}
+.frame{--p:#0b0d10;--l:#2a2e36;--f:#f2f4f7;--m:#8b93a1;--a:#7ff3d0;position:relative;aspect-ratio:16/9;background:var(--p);color:var(--f);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.frame.lt{--p:#e9eef6;--l:#b4bdcc;--f:#0c0e12;--m:#5d6573;--a:#0a8f6a}
+.info{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.card{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--panel)}
+.card h3{margin:0 0 6px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.card ul{margin:0;padding-left:18px}.card li{margin:3px 0}.cut{grid-column:1/-1;border-style:dashed}
+.bar{height:8px;border-radius:4px;background:var(--l)}
+.cta{border:1.5px solid var(--a);color:var(--a);border-radius:20px;padding:5px 14px;font-size:11px}
+.ph{border:1.5px dashed var(--l);border-radius:8px;position:relative;background:linear-gradient(to top right,transparent 49.5%,var(--l) 50%,transparent 50.5%),linear-gradient(to bottom right,transparent 49.5%,var(--l) 50%,transparent 50.5%)}
+svg{width:100%;height:100%}.col{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%}
+.ring{fill:none;stroke:var(--f);stroke-width:3;stroke-dasharray:1;stroke-dashoffset:1;animation:draw 2s ease forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.spin{transform-box:view-box;transform-origin:200px 100px;animation:spin 7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.nv{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;padding:10px 16px;font-size:11px;color:var(--m)}
+.giant{position:absolute;left:0;right:0;bottom:-2%;text-align:center;font:800 clamp(40px,11.5vw,150px)/1 system-ui;letter-spacing:.02em;animation:rise 1.4s .9s cubic-bezier(.2,.8,.2,1) both}
+@keyframes rise{from{transform:translateY(100%)}}
+.deal{position:absolute;left:50%;top:14%;width:15%;aspect-ratio:3/4;margin-left:-7.5%;animation:fan 1.6s 1.6s cubic-bezier(.2,.8,.2,1) both}
+@keyframes fan{from{transform:none}to{transform:translateX(var(--x)) rotate(var(--r))}}
+.small{position:absolute;top:10px;left:14px;font:700 12px system-ui;letter-spacing:.2em;animation:fade 1s 3.4s both}@keyframes fade{from{opacity:0}}
+.win{width:74%;height:62%;border:1.5px solid var(--l);border-radius:18px;overflow:hidden;position:relative;background:var(--p)}
+.words{font:600 clamp(14px,3vw,26px)/1.35 system-ui;padding:0 8%;text-align:center}
+.words span{color:var(--l);animation:lit .5s forwards}.words .it{font:italic 500 1.15em Georgia,serif}.words .it.on{color:var(--a)}
+@keyframes lit{to{color:var(--f)}}.words .it{animation-name:lita}@keyframes lita{to{color:var(--a)}}
+.tun{position:absolute;left:50%;top:50%;width:60%;height:60%;border:2px solid var(--a);border-radius:50%;opacity:0;animation:tun 4s linear infinite}
+@keyframes tun{from{transform:translate(-50%,-50%) scale(.1);opacity:0}25%{opacity:.8}to{transform:translate(-50%,-50%) scale(2.6);opacity:0}}
+.probe{position:absolute;left:50%;top:50%;width:46px;height:30px;margin:-15px 0 0 -23px;border:2px solid var(--f);border-radius:8px;animation:bob 3s ease-in-out infinite}
+.probe:before,.probe:after{content:"";position:absolute;top:8px;width:18px;height:2px;background:var(--f)}.probe:before{left:-22px}.probe:after{right:-22px}
+@keyframes bob{50%{transform:translateY(-14px) rotate(8deg)}}
+.flash{position:absolute;inset:0;background:#e9eef6;opacity:0;animation:fl 4s ease-in infinite}@keyframes fl{80%{opacity:0}100%{opacity:1}}
+.rows{width:88%;display:flex;flex-direction:column}
+.row{display:flex;align-items:center;gap:14px;padding:10px 4px;border-top:1px solid var(--l);font-size:14px;position:relative;transition:.25s}
+.row b{font-size:11px;color:var(--m);width:24px}.row span{margin-left:auto;font-size:11px;color:var(--m)}
+.row:hover{padding-left:18px;color:var(--a)}
+.row .pv{position:absolute;right:16%;top:-34px;width:96px;height:68px;opacity:0;transform:rotate(-5deg) scale(.8);transition:.25s;background-color:var(--p);z-index:2}
+.row:hover .pv{opacity:1;transform:rotate(-5deg) scale(1)}
+.gantt{width:86%;display:flex;flex-direction:column;gap:10px;font-size:11px}
+.gantt div{display:flex;align-items:center;gap:8px}.gantt u{text-decoration:none;width:64px;color:var(--m)}
+.gantt i{display:block;height:20px;border-radius:4px;background:var(--f);transform-origin:left;animation:gr 5s ease-in-out infinite;position:relative}
+@keyframes gr{0%{transform:scaleX(0)}40%,90%{transform:scaleX(1)}100%{transform:scaleX(0)}}
+.glow{position:absolute;inset:auto 0 0 0;height:70%;background:radial-gradient(60% 80% at 50% 100%,rgba(127,243,208,.28),transparent)}
+.prog{width:44%;height:10px;border:1.5px solid var(--a);border-radius:6px;overflow:hidden}.prog i{display:block;height:100%;width:0;background:var(--a);animation:fill 5s ease-in-out infinite}
+@keyframes fill{60%,100%{width:100%}}
+.expand{position:absolute;left:50%;top:60%;width:20px;height:20px;margin:-10px;border-radius:50%;border:3px solid var(--a);opacity:0;animation:ex 5s ease-in infinite}
+@keyframes ex{0%,62%{transform:scale(1);opacity:0}64%{opacity:1}100%{transform:scale(60);opacity:.9}}
+@media (max-width:760px){.wrap{grid-template-columns:1fr}nav{flex-direction:row;overflow-x:auto}nav button{white-space:nowrap}.info{grid-template-columns:1fr}.frame{aspect-ratio:4/3}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important}}
+</style></head><body>
+<header><h1>ORBITVALE · WIREFRAME v2</h1><p>One object (the ring), one line, dark ↔ light. ← → keys to move. The dot on each tab shows the section theme (black = dark, pale = light).</p></header>
+<div class="wrap"><nav id="nav"></nav><div class="main">
+<div class="top"><div><div class="tag" id="tag"></div><h2 id="ttl"></h2></div><div class="btns"><button id="re">↻ Replay</button><button id="pv">← Prev</button><button id="nx">Next →</button></div></div>
+<div class="frame" id="frame"></div>
+<div class="info"><div class="card"><h3>What happens</h3><ul id="what"></ul></div><div class="card"><h3>Build with · files</h3><ul id="tech"></ul></div>
+<div class="card cut"><h3>Cut from home (move to /about or delete)</h3>Black hole · Globe · Warp CTA · Singularity core. They are separate loud effects that fight the story. WorksWheel moves to /work.</div></div>
+</div></div>
+<script>
+var R='<ellipse class="ring" pathLength="1" cx="200" cy="100" rx="160" ry="42" transform="rotate(-18 200 100)"/>';
+var still=R.replace('class="ring"','style="stroke-dashoffset:0;stroke-dasharray:none;animation:none"');
+var W=function(a){return a.map(function(w,i){var it=w[0]=='*';return '<span class="'+(it?'it':'')+'" style="animation-delay:'+(i*.3)+'s">'+(it?w.slice(1):w)+' </span>'}).join('')};
+var S=[
+{t:'Opening',st:'REBUILD',d:1,tag:'00 · auto-plays (Halden)',w:function(){var c='';[['-34vw','-14deg'],['-12vw','-5deg'],['12vw','6deg'],['34vw','15deg']].forEach(function(p,i){c+='<div class="deal ph" style="--x:'+p[0].replace('vw','%')+';--r:'+p[1]+';animation-delay:'+(1.6+i*.15)+'s"></div>'});return '<svg viewBox="0 0 400 200" style="position:absolute;inset:0;opacity:.5">'+R+'</svg>'+c+'<div class="giant">ORBITVALE</div><div class="small">ORBITVALE</div>'},
+ n:['Black screen. Ring sweeps across and draws itself.','ORBITVALE rises huge from the bottom and fills the width.','Four project cards deal out and fan above it.','Name locks into the nav and the hero starts.'],k:['Preloader.tsx (replace particle assembly)','Framer Motion timeline','Scroll locked ~4s, skip button']},
+{t:'Hero',st:'REWORK',d:1,tag:'01 · Lusion window',w:function(){return '<div class="nv"><b>ORBITVALE</b><span>Work · Services · About · Contact</span></div><div class="col"><div class="win"><svg viewBox="0 0 400 200"><g class="spin">'+still+'<circle cx="352" cy="62" r="5" fill="var(--a)"/></g><circle cx="200" cy="100" r="26" fill="none" stroke="var(--l)" stroke-dasharray="4 4"/></svg></div><div class="bar" style="width:36%;height:10px"></div><div class="cta">↓ Scroll to explore</div></div>'},
+ n:['3D ring + planet inside a rounded window.','Pointer moves the camera slightly.','Window grows to full screen as you scroll in.'],k:['HeroSection / OrbitalHeroSection','Window uses clip-path/scale on scroll']},
+{t:'Manifesto',st:'KEEP',d:1,tag:'02 · pinned text',w:function(){return '<div class="words">'+W(['Every','business','has','gravity.','We','build','what','keeps','it','in','*orbit.'])+'</div>'},
+ n:['Section pins; words light up as you scroll.','One word is italic serif in the accent colour (Halden move).'],k:['TextReveal.tsx + italic accent span','Lenis scroll']},
+{t:'The Journey',st:'NEW',d:1,tag:'03 · Lusion tunnel',w:function(){var r='';for(var i=0;i<6;i++)r+='<div class="tun" style="animation-delay:-'+(i*.66)+'s"></div>';return r+'<div class="probe"></div><div style="position:absolute;top:12%;left:0;right:0;text-align:center;font:600 clamp(13px,2.4vw,22px)/1.2 system-ui;letter-spacing:.12em">STEP INTO ORBIT</div><div class="flash"></div>'},
+ n:['Pinned scene: camera flies through a tunnel of rings with a small probe floating.','Big text passes through.','Ends in a bright light burst that flips the page to light.'],k:['NEW JourneySection.tsx (R3F, one scene)','GSAP ScrollTrigger pin + scrub','Mobile: 2D fallback','Update the "Canvas 2D only" rule']},
+{t:'Services',st:'REWORK',d:0,tag:'04 · light theme',w:function(){var r=['Web & Product','Mobile Apps','AI & Automation','UI / UX Design'].map(function(x,i){return '<div class="row"><b>0'+(i+1)+'</b>'+x+'<span>↗</span><div class="ph pv"></div></div>'}).join('');return '<div class="rows">'+r+'</div>'},
+ n:['Page is now light. Big list rows, one per service.','Hover: row slides, image preview tilts in, cursor changes.','Hover the rows here.'],k:['ServicesOrbit.tsx → rows','Theme tokens light/dark']},
+{t:'Selected Work',st:'REWORK',d:0,tag:'05 · Halden list',w:function(){var r=['Astra','Lumen','Nova','OrbitDB'].map(function(x,i){return '<div class="row"><b>0'+(i+1)+'</b>'+x+'<span>2026 · Web</span><div class="ph pv"></div></div>'}).join('');return '<div class="rows"><div style="font:600 18px system-ui;margin-bottom:8px">Selected <i style="font-family:Georgia,serif;color:var(--a)">Work</i></div>'+r+'</div>'},
+ n:['Numbered rows with year and type.','Hover shows the cover image.','Click opens the case study with a ring-expand transition.'],k:['public/covers/*','work/[slug] pages already exist','WorksWheel moves to /work']},
+{t:'Process',st:'NEW',d:0,tag:'06 · Gantt bars',w:function(){var g=['Discover','Design','Build','Launch'].map(function(x,i){return '<div><u>'+x+'</u><span style="width:'+(i*18)+'%"></span><i style="width:'+(36+((i%2)*12))+'%;animation-delay:'+(i*.5)+'s"></i></div>'}).join('');return '<div class="gantt">'+g+'</div>'},
+ n:['Four bars draw in, staggered, like a schedule.','A small orbit dot sits at each start.'],k:['NEW ProcessSection.tsx','Framer Motion whileInView']},
+{t:'Footer / Next page',st:'NEW',d:1,tag:'07 · Lusion ending',w:function(){return '<div class="glow"></div><div class="giant" style="animation:none;bottom:-3%;opacity:.9">ORBITVALE</div><div class="col" style="position:absolute;top:14%"><div style="font:600 clamp(14px,3vw,26px) system-ui">Ready for liftoff?</div><div class="prog"><i></i></div><div style="font-size:11px;color:var(--m)">keep scrolling → Contact</div></div><div class="expand"></div>'},
+ n:['Giant name on dark with mint glow.','Keep scrolling: the bar fills, then the ring expands over the screen into /contact.'],k:['Footer.tsx + new NextPageBar','View Transitions API (already in repo)']}
+];
+var i=0,nav=document.getElementById('nav'),$=function(x){return document.getElementById(x)};
+S.forEach(function(s,k){var b=document.createElement('button');b.innerHTML='<b>0'+k+'</b>'+s.t+'<i class="'+(s.d?'d':'l')+'"></i>';b.onclick=function(){go(k)};nav.appendChild(b)});
+function go(k){i=(k+S.length)%S.length;var s=S[i];[].forEach.call(nav.children,function(b,n){b.className=n==i?'on':''});
+$('tag').textContent=s.tag;$('ttl').innerHTML=s.t+'<em>'+s.st+'</em>';var f=$('frame');f.className='frame'+(s.d?'':' lt');f.innerHTML=s.w();
+$('what').innerHTML=s.n.map(function(x){return '<li>'+x+'</li>'}).join('');$('tech').innerHTML=s.k.map(function(x){return '<li>'+x+'</li>'}).join('')}
+$('re').onclick=function(){go(i)};$('pv').onclick=function(){go(i-1)};$('nx').onclick=function(){go(i+1)};
+document.addEventListener('keydown',function(e){if(e.key=='ArrowRight')go(i+1);if(e.key=='ArrowLeft')go(i-1)});
+go(0);
+</script></body></html>

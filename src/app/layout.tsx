@@ -3,7 +3,6 @@ import localFont from 'next/font/local';
 import './globals.css';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
-import { Preloader } from '@/components/Preloader';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import { SmoothScroll } from '@/components/SmoothScroll';
 import { WarpTunnel } from '@/components/WarpTunnel';
@@ -94,7 +93,6 @@ export default function RootLayout({
           <CustomCursor />
           <AmbientSound />
           <WarpTunnel />
-          <Preloader />
           <ScrollProgress />
           <Nav />
           <main>{children}</main>

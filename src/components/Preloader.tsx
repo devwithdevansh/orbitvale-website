@@ -1,290 +1,319 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import Link from 'next/link';
 
-/*
- * Act 00 — Preloader — Particle Assembly
+interface CardItem {
+  title: string;
+  category: string;
+  cover: string;
+  accent: string;
+  xOffset: string;
+  rotate: string;
+  delay: number;
+}
+
+const FAN_CARDS: CardItem[] = [
+  {
+    title: 'Project Phoenix',
+    category: 'SaaS Platform',
+    cover: '/covers/project-phoenix.svg',
+    accent: '#ff6230',
+    xOffset: '-34vw',
+    rotate: '-14deg',
+    delay: 0,
+  },
+  {
+    title: 'Nebula CMS',
+    category: 'Headless CMS',
+    cover: '/covers/nebula-cms.svg',
+    accent: '#c084fc',
+    xOffset: '-12vw',
+    rotate: '-5deg',
+    delay: 120,
+  },
+  {
+    title: 'OrbitDB',
+    category: 'Decentralized DB',
+    cover: '/covers/orbitdb.svg',
+    accent: '#7ff3d0',
+    xOffset: '12vw',
+    rotate: '6deg',
+    delay: 240,
+  },
+  {
+    title: 'Lumen',
+    category: 'Real-time Analytics',
+    cover: '/covers/lumen.svg',
+    accent: '#a3e635',
+    xOffset: '34vw',
+    rotate: '15deg',
+    delay: 360,
+  },
+];
+
+/**
+ * Section 00 · Opening Sequence (Halden Reference Rebuild)
  *
- * Phase 1 (0 → 0.5): Ring traces itself (SVG stroke-dashoffset)
- * Phase 2 (0.4 → 0.85): Canvas particles converge into ORBITVALE letterforms
- * Phase 3 (0.85 → 1.0): Full brand logo PNG cross-fades in; particles dissolve
- * Exit: whole screen scales up and fades out
- *
- * Session-scoped — only plays once per browser session.
+ * Sequence:
+ * 1. Pitch black screen. Orbit ring sweeps and draws itself with mint glow (-13° tilt).
+ * 2. Giant "ORBITVALE" typography rises monumental from the bottom to anchor the screen.
+ * 3. Four project cards deal out from the center stack and fan out in 3D above the name.
+ * 4. Center card displays the circular "See Work" badge.
+ * 5. Name locks into top navigation, unlocking scroll.
+ * 6. Includes a clean "Skip" button and keyboard [ESC] dismiss.
  */
-
-const WORD = 'ORBITVALE';
-
 export function Preloader() {
   const [active, setActive] = useState(true);
-  const [progress, setProgress] = useState(0);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const rafRef = useRef(0);
+  const [phase, setPhase] = useState<'ring' | 'rise' | 'fan' | 'lock' | 'exit'>('ring');
+  const [pointer, setPointer] = useState({ x: 0, y: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Keyboard escape listener to skip
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') skip();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const skip = () => {
+    setPhase('exit');
+    setTimeout(() => {
+      setActive(false);
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('ov-opened-v2', '1');
+        document.body.style.overflow = '';
+      }
+    }, 450);
+  };
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    if (sessionStorage.getItem('ov-preloaded') === '1') {
+
+    // Check if previously viewed in this session
+    if (sessionStorage.getItem('ov-opened-v2') === '1') {
       setActive(false);
       return;
     }
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const duration = reduced ? 200 : 2600;
-    const start = performance.now();
-    let raf = 0;
-
-    const tick = (now: number) => {
-      const p = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - p, 2.4);
-      setProgress(eased);
-      if (p < 1) {
-        raf = requestAnimationFrame(tick);
-      } else {
-        sessionStorage.setItem('ov-preloaded', '1');
-        window.setTimeout(() => setActive(false), 700);
-      }
-    };
-
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, []);
-
-  /* Particle canvas */
-  useEffect(() => {
-    if (!active) return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced) return;
-
-    /* ── Sample letterform targets ───────────────────────────────────── */
-    function sampleText(word: string, canvasW: number, canvasH: number) {
-      const off = document.createElement('canvas');
-      const fontSize = Math.min(canvasW * 0.075, 56);
-      off.width = canvasW;
-      off.height = canvasH;
-      const octx = off.getContext('2d')!;
-      octx.fillStyle = '#fff';
-      octx.font = `600 ${fontSize}px ui-monospace,monospace`;
-      octx.textAlign = 'center';
-      octx.textBaseline = 'middle';
-      octx.letterSpacing = '0.28em';
-      octx.fillText(word, canvasW / 2, canvasH / 2);
-      const data = octx.getImageData(0, 0, canvasW, canvasH).data;
-      const pts: [number, number][] = [];
-      const step = 4;
-      for (let y = 0; y < canvasH; y += step) {
-        for (let x = 0; x < canvasW; x += step) {
-          if (data[(y * canvasW + x) * 4 + 3] > 128) {
-            pts.push([x, y]);
-          }
-        }
-      }
-      return pts;
+    if (reduced) {
+      setActive(false);
+      return;
     }
 
-    /* ── Particle type ──────────────────────────────────────────────── */
-    type Particle = {
-      x: number; y: number;   // current pos
-      tx: number; ty: number; // target (letter pixel)
-      ox: number; oy: number; // origin (scatter pos)
-      vx: number; vy: number; // velocity
-      size: number;
-      alpha: number;
-    };
+    // Lock body scroll during opening sequence
+    document.body.style.overflow = 'hidden';
 
-    let W = 0, H = 0, dpr = 1;
-    let particles: Particle[] = [];
-    let targets: [number, number][] = [];
-    let running = true;
-
-    const resize = () => {
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      W = window.innerWidth;
-      H = window.innerHeight;
-      canvas.width = W * dpr;
-      canvas.height = H * dpr;
-      canvas.style.width = `${W}px`;
-      canvas.style.height = `${H}px`;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      targets = sampleText(WORD, W, H);
-      init();
-    };
-
-    const init = () => {
-      const count = Math.min(targets.length, 600);
-      particles = [];
-      for (let i = 0; i < count; i++) {
-        const t = targets[Math.floor(Math.random() * targets.length)];
-        const angle = Math.random() * Math.PI * 2;
-        const dist = 200 + Math.random() * 300;
-        const ox = W / 2 + Math.cos(angle) * dist;
-        const oy = H / 2 + Math.sin(angle) * dist;
-        particles.push({
-          x: ox, y: oy, tx: t[0], ty: t[1],
-          ox, oy, vx: 0, vy: 0,
-          size: 1 + Math.random() * 1.5,
-          alpha: 0.6 + Math.random() * 0.4,
-        });
-      }
-    };
-
-    resize();
-    window.addEventListener('resize', resize);
-
-    const draw = () => {
-      if (!running) return;
-      ctx.clearRect(0, 0, W, H);
-
-      // phase: 0=scatter, 1=assembled (driven by global progress)
-      const globalP = parseFloat(canvas.dataset.progress || '0');
-      // particles start converging at 40% global, fully assembled at 85%
-      const phase = Math.max(0, Math.min(1, (globalP - 0.4) / 0.45));
-      // dissolve at 85%+
-      const dissolve = Math.max(0, Math.min(1, (globalP - 0.82) / 0.15));
-
-      for (const p of particles) {
-        // Spring toward target when phase > 0
-        const ax = (p.tx - p.x) * 0.08 * phase;
-        const ay = (p.ty - p.y) * 0.08 * phase;
-        p.vx = p.vx * 0.75 + ax;
-        p.vy = p.vy * 0.75 + ay;
-        // scatter drift when phase is 0
-        if (phase < 0.05) {
-          p.vx += (Math.random() - 0.5) * 0.3;
-          p.vy += (Math.random() - 0.5) * 0.3;
-        }
-        p.x += p.vx;
-        p.y += p.vy;
-
-        const a = p.alpha * (1 - dissolve);
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(127,243,208,${a})`;
-        ctx.fill();
-      }
-
-      rafRef.current = requestAnimationFrame(draw);
-    };
-
-    rafRef.current = requestAnimationFrame(draw);
+    // Timeline steps
+    // 0.0s: Ring drawing starts
+    const tRise = setTimeout(() => setPhase('rise'), 750);
+    const tFan = setTimeout(() => setPhase('fan'), 1450);
+    const tLock = setTimeout(() => setPhase('lock'), 2850);
+    const tExit = setTimeout(() => {
+      setPhase('exit');
+      setTimeout(() => {
+        setActive(false);
+        sessionStorage.setItem('ov-opened-v2', '1');
+        document.body.style.overflow = '';
+      }, 650);
+    }, 3900);
 
     return () => {
-      running = false;
-      cancelAnimationFrame(rafRef.current);
-      window.removeEventListener('resize', resize);
+      clearTimeout(tRise);
+      clearTimeout(tFan);
+      clearTimeout(tLock);
+      clearTimeout(tExit);
+      document.body.style.overflow = '';
     };
-  }, [active]);
+  }, []);
 
-  /* Keep canvas progress in sync via data attribute */
-  useEffect(() => {
-    if (canvasRef.current) {
-      canvasRef.current.dataset.progress = String(progress);
-    }
-  }, [progress]);
+  // Subtle 3D mouse parallax on fanned cards
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const { innerWidth, innerHeight } = window;
+    const x = (e.clientX - innerWidth / 2) / (innerWidth / 2);
+    const y = (e.clientY - innerHeight / 2) / (innerHeight / 2);
+    setPointer({ x, y });
+  };
 
   if (!active) return null;
 
-  const exiting = progress >= 0.97;
-
-  /* Ring geometry */
-  const rx = 110, ry = 42;
-  const circ = Math.PI * (3 * (rx + ry) - Math.sqrt((3 * rx + ry) * (rx + 3 * ry)));
-  const ringP = Math.min(1, progress / 0.5);
-  const dashOffset = circ * (1 - ringP);
-
-  /* Logo fade */
-  const logoOpacity = Math.max(0, Math.min(1, (progress - 0.8) / 0.18));
-
-  /* Counter */
-  const counter = String(Math.round(progress * 100)).padStart(3, '0');
-
   return (
     <div
-      className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-bg"
+      ref={containerRef}
+      onMouseMove={handleMouseMove}
+      className="fixed inset-0 z-[200] flex flex-col items-center justify-center overflow-hidden bg-[#07080a] text-[#f2f4f7] select-none"
       style={{
-        opacity: exiting ? 0 : 1,
-        transform: exiting ? 'scale(1.08)' : 'scale(1)',
-        transition: 'opacity 0.65s ease-in-out, transform 0.65s ease-in-out',
-        pointerEvents: exiting ? 'none' : 'auto',
+        opacity: phase === 'exit' ? 0 : 1,
+        transform: phase === 'exit' ? 'scale(1.04)' : 'scale(1)',
+        transition: 'opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1)',
+        pointerEvents: phase === 'exit' ? 'none' : 'auto',
       }}
-      role="status"
-      aria-label="Loading Orbitvale"
-      aria-hidden={exiting}
+      role="dialog"
+      aria-label="Orbitvale Opening Sequence"
     >
-      {/* Particle canvas — covers whole screen */}
-      <canvas
-        ref={canvasRef}
-        className="pointer-events-none absolute inset-0 z-0"
-        aria-hidden="true"
-      />
+      {/* Top Nav Lock Position indicator */}
+      <div
+        className="absolute top-5 left-6 z-30 font-display font-semibold tracking-[-0.01em] text-sm md:text-base text-ink"
+        style={{
+          opacity: phase === 'lock' || phase === 'exit' ? 1 : 0,
+          transform: phase === 'lock' || phase === 'exit' ? 'translateY(0)' : 'translateY(-10px)',
+          transition: 'opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+        }}
+      >
+        ORBITVALE
+      </div>
 
-      {/* Ring SVG */}
-      <div className="relative z-10 flex flex-col items-center">
-        <div style={{ width: 280, height: 130, position: 'relative' }}>
-          <svg
-            viewBox="0 0 280 130"
+      {/* Skip Button */}
+      <button
+        type="button"
+        onClick={skip}
+        className="absolute top-5 right-6 z-30 flex items-center gap-2 rounded-full border border-line/40 bg-panel/60 px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-muted backdrop-blur-md transition-colors hover:border-accent hover:text-accent"
+        aria-label="Skip intro animation"
+      >
+        <span>Skip</span>
+        <span className="text-dim">[ESC]</span>
+      </button>
+
+      {/* ── Ring Sweep Layer ────────────────────────────────────────────── */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <svg
+          viewBox="0 0 600 300"
+          className="w-full max-w-3xl h-auto overflow-visible"
+          style={{
+            opacity: phase === 'exit' ? 0 : 0.65,
+            transition: 'opacity 0.6s ease',
+          }}
+          aria-hidden="true"
+        >
+          <defs>
+            <filter id="ring-glow-open">
+              <feGaussianBlur stdDeviation="4" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+          {/* Subtle background track */}
+          <ellipse
+            cx="300"
+            cy="150"
+            rx="240"
+            ry="64"
+            transform="rotate(-13 300 150)"
             fill="none"
-            className="absolute inset-0 w-full h-full"
-            style={{ overflow: 'visible' }}
-          >
-            <defs>
-              <filter id="pre-glow">
-                <feGaussianBlur stdDeviation="3.5" result="blur" />
-                <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-              </filter>
-            </defs>
-            {/* Dim track */}
-            <ellipse cx="140" cy="65" rx={rx} ry={ry} transform="rotate(-13 140 65)"
-              stroke="rgba(127,243,208,0.07)" strokeWidth="1.5" fill="none" />
-            {/* Animated fill */}
-            <ellipse cx="140" cy="65" rx={rx} ry={ry} transform="rotate(-13 140 65)"
-              stroke="#7ff3d0" strokeWidth="2" fill="none"
-              strokeDasharray={`${circ}`}
-              strokeDashoffset={`${dashOffset}`}
-              strokeLinecap="round"
-              filter="url(#pre-glow)"
-              style={{ transition: 'stroke-dashoffset 0.04s linear' }}
-            />
-            {/* Leading dot */}
-            {ringP > 0.03 && ringP < 0.97 && (() => {
-              const angle = (-13 - 90 + ringP * 360) * (Math.PI / 180);
-              const x = 140 + rx * Math.cos(angle);
-              const y = 65 + ry * Math.sin(angle);
-              return <circle cx={x} cy={y} r="3" fill="#7ff3d0" filter="url(#pre-glow)" />;
-            })()}
-          </svg>
+            stroke="rgba(255,255,255,0.06)"
+            strokeWidth="1.5"
+          />
+          {/* Animated drawing ring */}
+          <ellipse
+            cx="300"
+            cy="150"
+            rx="240"
+            ry="64"
+            transform="rotate(-13 300 150)"
+            fill="none"
+            stroke="#7ff3d0"
+            strokeWidth="2"
+            strokeDasharray="1600"
+            strokeDashoffset={phase === 'ring' ? '800' : '0'}
+            strokeLinecap="round"
+            filter="url(#ring-glow-open)"
+            style={{
+              transition: 'stroke-dashoffset 1.8s cubic-bezier(0.16, 1, 0.3, 1)',
+            }}
+          />
+        </svg>
+      </div>
 
-          {/* Real logo PNG cross-fade */}
-          <div
-            className="absolute inset-0 flex items-center justify-center"
-            style={{ opacity: logoOpacity, transition: 'opacity 0.3s ease-out' }}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/brand/orbitvale.png"
-              alt="Orbitvale"
+      {/* ── 3D Fanned Project Cards (Halden Hero Deck) ──────────────────── */}
+      <div
+        className="relative z-10 flex items-center justify-center w-full max-w-4xl h-64 md:h-80"
+        style={{
+          perspective: '1200px',
+          transformStyle: 'preserve-3d',
+        }}
+      >
+        {FAN_CARDS.map((card, index) => {
+          const isFanned = phase === 'fan' || phase === 'lock' || phase === 'exit';
+          const isCenter = index === 1 || index === 2;
+          const tiltX = pointer.y * -8;
+          const tiltY = pointer.x * 12;
+
+          return (
+            <div
+              key={card.title}
+              className="absolute w-36 sm:w-44 md:w-52 aspect-[3/4] rounded-2xl border border-white/10 bg-[#101216] p-2 shadow-2xl transition-all duration-700"
               style={{
-                height: 56,
-                width: 'auto',
-                mixBlendMode: 'screen',
-                filter: `drop-shadow(0 0 ${16 * logoOpacity}px rgba(127,243,208,${0.5 * logoOpacity}))`,
+                transform: isFanned
+                  ? `translateX(${card.xOffset}) rotate(${card.rotate}) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(${isCenter ? 1.05 : 0.95})`
+                  : 'translateX(0) rotate(0deg) scale(0.65)',
+                opacity: phase === 'ring' ? 0 : isFanned ? 1 : 0.8,
+                transitionDelay: `${card.delay}ms`,
+                transitionTimingFunction: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
+                zIndex: isCenter ? 20 : 10,
               }}
-            />
-          </div>
-        </div>
+            >
+              {/* Card Cover Image */}
+              <div className="relative h-full w-full overflow-hidden rounded-xl bg-black/40">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={card.cover}
+                  alt={card.title}
+                  className="h-full w-full object-cover"
+                />
+                <div
+                  className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"
+                />
+                <div className="absolute bottom-3 left-3 right-3">
+                  <div
+                    className="font-mono text-[9px] uppercase tracking-[0.2em]"
+                    style={{ color: card.accent }}
+                  >
+                    {card.category}
+                  </div>
+                  <div className="font-display text-xs font-semibold text-white">
+                    {card.title}
+                  </div>
+                </div>
 
-        {/* Counter + label */}
-        <div className="mt-10 font-mono text-xs tracking-[0.32em] text-muted tabular-nums">
-          {counter}
-        </div>
-        <div className="mt-2 font-mono text-[9px] uppercase tracking-[0.3em] text-dim">
-          assembling orbit
-        </div>
+                {/* Center Badge on top card (Halden "See Work" badge) */}
+                {index === 2 && isFanned && (
+                  <div
+                    className="absolute -top-3 -right-3 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-[#07080a] border border-accent/60 shadow-xl transition-transform duration-500 hover:scale-110"
+                    style={{
+                      animation: 'pulse-slow 2.5s infinite ease-in-out',
+                    }}
+                  >
+                    <span className="font-mono text-[9px] uppercase tracking-wider text-accent text-center leading-tight">
+                      See<br />Work →
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* ── Giant Architectural ORBITVALE Typography (Halden Anchor) ────── */}
+      <div
+        className="absolute left-0 right-0 bottom-[-2%] z-0 text-center font-display font-extrabold tracking-[-0.02em] select-none text-white/90"
+        style={{
+          fontSize: 'clamp(44px, 11.5vw, 160px)',
+          lineHeight: 0.9,
+          transform: phase === 'ring' ? 'translateY(110%)' : 'translateY(0)',
+          opacity: phase === 'ring' ? 0 : 0.92,
+          transition: 'transform 1.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.2s ease',
+        }}
+      >
+        ORBITVALE
       </div>
     </div>
   );
 }
+
+export default Preloader;
