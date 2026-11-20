@@ -9,6 +9,19 @@ import { WorksWheel } from '@/components/WorksWheel';
 import { DeepTechSection } from '@/components/DeepTechSection';
 import { GlobeSection } from '@/components/GlobeSection';
 import { CtaSection } from '@/components/CtaSection';
+import { MarqueeStrip } from '@/components/MarqueeStrip';
+import { LogoMask } from '@/components/LogoMask';
+
+const MARQUEE_ITEMS = [
+  'Product Engineering',
+  'Experience Design',
+  'Interactive 3D',
+  'Design Systems',
+  'Cloud & DevOps',
+  'Strategy & Advisory',
+  'Orbitvale',
+  'Continuous Motion',
+];
 
 /**
  * Inner component: has access to ScrollClockContext.
@@ -23,14 +36,28 @@ function HomeContent() {
       {/* Act I — The Object: live Kepler orbital hero */}
       <HeroSection />
 
+      {/* Capability ticker — separates hero from rest */}
+      <MarqueeStrip
+        items={MARQUEE_ITEMS}
+        speed={0.55}
+        separator="·"
+        className="border-y border-line py-5"
+      />
+
       {/* Quiet beat — brand object / particle core */}
-      <section
-        id="chapter-singularity"
+      <LogoMask
+        word="ORBITVALE"
+        threshold={0.2}
         className="relative h-[70svh] min-h-[480px] w-full overflow-hidden md:h-[640px]"
-        data-chapter="singularity"
       >
-        <SingularityCore headline="ORBITVALE" particleCount={1800} className="h-full" />
-      </section>
+        <section
+          id="chapter-singularity"
+          className="relative h-[70svh] min-h-[480px] w-full overflow-hidden md:h-[640px]"
+          data-chapter="singularity"
+        >
+          <SingularityCore headline="ORBITVALE" particleCount={1800} className="h-full" />
+        </section>
+      </LogoMask>
 
       {/* Act II — The Signal */}
       <div id="chapter-signal" data-chapter="signal">
@@ -66,6 +93,14 @@ function HomeContent() {
       <div id="chapter-deep" data-chapter="deep">
         <DeepTechSection />
       </div>
+
+      {/* Capability ticker between sections */}
+      <MarqueeStrip
+        items={[...MARQUEE_ITEMS].reverse()}
+        speed={0.45}
+        separator="○"
+        className="border-y border-line py-5"
+      />
 
       {/* Act VI — The Network */}
       <div id="chapter-network" data-chapter="network">

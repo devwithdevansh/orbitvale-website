@@ -68,3 +68,53 @@ body {
   from { opacity: 0.7; }
   to   { opacity: 1.0; }
 }
+
+
+/* ── View Transitions API — page-to-page morph ───────────────────────────────
+   Enables native browser cross-document fade when navigating between pages.
+   Progressive enhancement: ignored by browsers that don't support it yet.    */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root) {
+  animation: vt-fade-out 220ms ease forwards;
+}
+::view-transition-new(root) {
+  animation: vt-fade-in 320ms ease 100ms both;
+}
+
+@keyframes vt-fade-out {
+  to { opacity: 0; transform: scale(0.98); }
+}
+@keyframes vt-fade-in {
+  from { opacity: 0; transform: scale(1.01); }
+}
+
+/* ── Marquee will-change hint ────────────────────────────────────────────── */
+.marquee-track {
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* ── Text reveal clip ────────────────────────────────────────────────────── */
+.overflow-clip {
+  overflow: hidden;
+}
+
+/* ── Focus ring override for custom cursor contexts ─────────────────────── */
+:focus-visible {
+  outline: 1.5px solid rgba(127, 243, 208, 0.7);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* ── Smooth scroll anchoring ────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation: none; }
+}

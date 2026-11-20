@@ -103,7 +103,7 @@ export function LogoMask({
             {/* Letter row — mix-blend-mode:destination-out punches holes in backdrop */}
             <div
               className="relative flex"
-              style={{ mixBlendMode: 'destination-out' }}
+              style={{ mixBlendMode: 'destination-out' as React.CSSProperties['mixBlendMode'] }}
             >
               {letters.map((char, i) => (
                 <span

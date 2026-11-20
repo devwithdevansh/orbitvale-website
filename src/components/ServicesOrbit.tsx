@@ -38,12 +38,27 @@ export function ServicesOrbit({ globalProgress }: ServicesOrbitProps) {
   const [scrollRot, setScrollRot] = useState(0);
   const reduced = typeof window !== 'undefined' ? prefersReducedMotion() : false;
 
-  // Ring geometry
-  const innerA = 128;
-  const innerB = 128 * 0.42;
-  const outerA = 192;
-  const outerB = 192 * 0.42;
+  // Ring geometry — responsive: smaller on narrow viewports
+  const [innerA, setInnerA] = useState(128);
+  const [innerB, setInnerB] = useState(128 * 0.42);
+  const [outerA, setOuterA] = useState(192);
+  const [outerB, setOuterB] = useState(192 * 0.42);
   const tilt = -13; // brand ring tilt, degrees
+
+  // Adapt ring radii on mount + resize
+  useEffect(() => {
+    const update = () => {
+      const vw = window.innerWidth;
+      const scale = vw < 400 ? 0.6 : vw < 640 ? 0.75 : 1.0;
+      setInnerA(128 * scale);
+      setInnerB(128 * 0.42 * scale);
+      setOuterA(192 * scale);
+      setOuterB(192 * 0.42 * scale);
+    };
+    update();
+    window.addEventListener('resize', update, { passive: true });
+    return () => window.removeEventListener('resize', update);
+  }, []);
 
   // ── Rotation driven by master clock (preferred) ─────────────────────────
   // When globalProgress changes, re-read the section's BCR to get local p.

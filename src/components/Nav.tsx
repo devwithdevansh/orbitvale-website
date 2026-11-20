@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { MagneticButton } from '@/components/MagneticButton';
 
 const LINKS = [
   { href: '/work', label: 'Work' },
@@ -39,14 +40,14 @@ export function Nav() {
           aria-label="Orbitvale home"
         >
           <Image
-              src="/brand/orbitvale.png"
-              alt="Orbitvale"
-              width={160}
-              height={52}
-              priority
-              className="h-7 w-auto object-contain mix-blend-screen brightness-110 sm:h-8"
-              style={{ maxWidth: 160 }}
-            />
+            src="/brand/orbitvale.png"
+            alt="Orbitvale"
+            width={160}
+            height={52}
+            priority
+            className="h-7 w-auto object-contain mix-blend-screen brightness-110 sm:h-8"
+            style={{ maxWidth: 160 }}
+          />
         </Link>
 
         <nav className="hidden items-center gap-9 md:flex">
@@ -66,12 +67,15 @@ export function Nav() {
           })}
         </nav>
 
-        <Link
-          href="/contact"
-          className="hidden rounded-full border border-accent/40 bg-accent/10 px-5 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-accent transition-colors hover:bg-accent/20 md:inline-block"
-        >
-          Start a project
-        </Link>
+        {/* Magnetic CTA button */}
+        <MagneticButton strength={0.35} className="hidden md:inline-block">
+          <Link
+            href="/contact"
+            className="rounded-full border border-accent/40 bg-accent/10 px-5 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-accent transition-colors hover:bg-accent/20"
+          >
+            Start a project
+          </Link>
+        </MagneticButton>
 
         <button
           type="button"

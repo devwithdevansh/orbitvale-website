@@ -56,6 +56,7 @@ const jetbrainsMono = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://orbitvale.com'),
   title: 'Orbitvale — Digital systems in continuous motion',
   description:
     'Orbitvale builds digital experiences that orbit your business goals. Development, design, and strategic technology solutions.',
@@ -71,6 +72,13 @@ export const metadata: Metadata = {
     title: 'Orbitvale — Digital systems in continuous motion',
     description: 'We build digital experiences that orbit your business goals.',
     type: 'website',
+    url: 'https://orbitvale.com',
+    siteName: 'Orbitvale',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Orbitvale — Digital systems in continuous motion',
+    description: 'We build digital experiences that orbit your business goals.',
   },
 };
 

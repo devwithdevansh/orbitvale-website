@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 /* ─── Project data ──────────────────────────────────────────────────── */
-export const PROJECTS = [
+const PROJECTS = [
   {
     slug: 'project-phoenix',
     title: 'Project Phoenix',
