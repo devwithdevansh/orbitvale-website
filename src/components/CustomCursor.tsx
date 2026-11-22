@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 /**
  * CustomCursor — Lusion-class magnetic cursor
@@ -8,32 +8,44 @@ import { useEffect, useRef } from 'react';
  * - Soft-follow ring with spring physics
  * - Dot locks to exact pointer position
  * - Scales up on <a>, <button> hover (magnetic attraction)
- * - Hides native cursor globally
- * - Reduced-motion: hides itself entirely (native cursor returns)
+ * - Media query guarded: ONLY active on devices with fine pointer & hover support
+ * - Automatically falls back to native cursor on touchscreens and reduced motion
+ * - Full pointer-events-none; never intercepts clicks or touch events
  */
 export function CustomCursor() {
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
+  const [enabled, setEnabled] = useState(false);
+
   const stateRef = useRef({
-    mx: -100, my: -100,  // mouse pos
-    rx: -100, ry: -100,  // ring pos (spring follows)
-    vx: 0, vy: 0,        // ring velocity
+    mx: -100,
+    my: -100,
+    rx: -100,
+    ry: -100,
+    vx: 0,
+    vy: 0,
     hovered: false,
     visible: false,
     raf: 0,
   });
 
   useEffect(() => {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced) return;
+    // Only enable on devices with a mouse/fine pointer and hover capability
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!finePointer || reducedMotion) {
+      setEnabled(false);
+      return;
+    }
+
+    setEnabled(true);
 
     const dot = dotRef.current;
     const ring = ringRef.current;
     if (!dot || !ring) return;
 
     const s = stateRef.current;
-
-    // Spring constants — tweak for feel
     const STIFFNESS = 0.14;
     const DAMPING = 0.78;
 
@@ -46,22 +58,24 @@ export function CustomCursor() {
         s.rx = e.clientX;
         s.ry = e.clientY;
         s.visible = true;
-        dot!.style.opacity = '1';
-        ring!.style.opacity = '1';
+        if (dot) dot.style.opacity = '1';
+        if (ring) ring.style.opacity = '1';
       }
     }
 
     function onLeave() {
       s.visible = false;
-      dot!.style.opacity = '0';
-      ring!.style.opacity = '0';
+      if (dot) dot.style.opacity = '0';
+      if (ring) ring.style.opacity = '0';
     }
 
     function onOver(e: PointerEvent) {
-      const target = e.target as HTMLElement;
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
       s.hovered = !!(
         target.closest('a') ||
         target.closest('button') ||
+        target.closest('[role="button"]') ||
         target.closest('[data-cursor-hover]')
       );
     }
@@ -71,19 +85,21 @@ export function CustomCursor() {
     document.addEventListener('pointerover', onOver, { passive: true });
 
     function frame() {
-      // Dot snaps instantly
-      dot!.style.transform = `translate(${s.mx - 4}px, ${s.my - 4}px)`;
+      if (dot && ring) {
+        // Dot snaps instantly to pointer
+        dot.style.transform = `translate(${s.mx - 4}px, ${s.my - 4}px)`;
 
-      // Ring spring physics
-      const dx = s.mx - s.rx;
-      const dy = s.my - s.ry;
-      s.vx = s.vx * DAMPING + dx * STIFFNESS;
-      s.vy = s.vy * DAMPING + dy * STIFFNESS;
-      s.rx += s.vx;
-      s.ry += s.vy;
+        // Ring spring physics
+        const dx = s.mx - s.rx;
+        const dy = s.my - s.ry;
+        s.vx = s.vx * DAMPING + dx * STIFFNESS;
+        s.vy = s.vy * DAMPING + dy * STIFFNESS;
+        s.rx += s.vx;
+        s.ry += s.vy;
 
-      const scale = s.hovered ? 1.9 : 1;
-      ring!.style.transform = `translate(${s.rx - 20}px, ${s.ry - 20}px) scale(${scale})`;
+        const scale = s.hovered ? 1.85 : 1;
+        ring.style.transform = `translate(${s.rx - 20}px, ${s.ry - 20}px) scale(${scale})`;
+      }
 
       s.raf = requestAnimationFrame(frame);
     }
@@ -99,25 +115,31 @@ export function CustomCursor() {
     };
   }, []);
 
+  if (!enabled) {
+    return null;
+  }
+
   return (
     <>
-      {/* Exact dot */}
+      {/* Precision pointer dot */}
       <div
         ref={dotRef}
         aria-hidden="true"
-        className="pointer-events-none fixed left-0 top-0 z-[9999] h-2 w-2 rounded-full bg-accent opacity-0"
-        style={{ willChange: 'transform', transition: 'opacity 0.2s' }}
+        className="pointer-events-none fixed left-0 top-0 z-[9999] h-2 w-2 rounded-full bg-accent opacity-0 transition-opacity duration-200"
+        style={{ willChange: 'transform' }}
       />
-      {/* Spring-follow ring */}
+      {/* Spring trailing ring */}
       <div
         ref={ringRef}
         aria-hidden="true"
-        className="pointer-events-none fixed left-0 top-0 z-[9998] h-10 w-10 rounded-full border border-accent/60 opacity-0"
+        className="pointer-events-none fixed left-0 top-0 z-[9998] h-10 w-10 rounded-full border border-accent/60 opacity-0 transition-opacity duration-200"
         style={{
+          boxShadow: '0 0 12px rgba(127, 243, 208, 0.25)',
           willChange: 'transform',
-          transition: 'opacity 0.2s, transform 0s',
         }}
       />
     </>
   );
 }
+
+export default CustomCursor;

@@ -8,10 +8,11 @@ import { OrbitvaleSvgLogo } from './OrbitvaleSvgLogo';
 export interface OrbitvaleLogoProps {
   className?: string;
   /**
-   * 'full'  — real PNG wordmark + ring (best quality, use in Nav / hero)
-   * 'ring'  — SVG ring animation only (use in Preloader, ScrollProgress, favicon)
+   * 'full'  — authentic extracted tight logo PNG with wordmark + orbit (best quality)
+   * 'black' — alternative on light background
+   * 'ring'  — SVG ring animation only (use in ScrollProgress, favicon, etc.)
    */
-  variant?: 'full' | 'ring';
+  variant?: 'full' | 'black' | 'ring';
   /** 0→1 ring draw progress (only used in 'ring' variant) */
   ringProgress?: number;
   priority?: boolean;
@@ -20,11 +21,9 @@ export interface OrbitvaleLogoProps {
 /**
  * Primary Orbitvale brand component.
  *
- * Uses the authentic logo PNG (white-on-black) with mix-blend-screen so it
- * composites cleanly over any dark background without cropping.
- *
- * The PNG at /brand/orbitvale.png (or fallback orbitvale-logo.jpg) is the
- * source of truth for the wordmark — no hand-coded SVG paths.
+ * Uses the authentic tight transparent logo PNG from /brand/v2/full-logo.png
+ * (1162×459, aspect ratio ~2.532).
+ * True alpha channel — no mix-blend-screen hack required.
  */
 export function OrbitvaleLogo({
   className,
@@ -41,24 +40,22 @@ export function OrbitvaleLogo({
     );
   }
 
+  const src = variant === 'black'
+    ? '/brand/v2/full-logo-black.png'
+    : '/brand/v2/full-logo.png';
+
   return (
-    <div className={cn('relative inline-flex items-center', className)}>
+    <div className={cn('relative inline-flex items-center aspect-[1162/459]', className)}>
       <Image
-        src="/brand/orbitvale.png"
+        src={src}
         alt="Orbitvale"
-        width={240}
-        height={80}
+        width={1162}
+        height={459}
         priority={priority}
-        className="h-auto w-full object-contain mix-blend-screen brightness-110"
-        style={{ imageRendering: 'crisp-edges' }}
-        onError={(e) => {
-          // Graceful fallback to JPG if PNG not yet placed
-          const img = e.currentTarget as HTMLImageElement;
-          if (!img.src.includes('orbitvale-logo.jpg')) {
-            img.src = '/brand/orbitvale-logo.jpg';
-          }
-        }}
+        className="h-full w-full object-contain"
       />
     </div>
   );
 }
+
+export default OrbitvaleLogo;

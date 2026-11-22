@@ -88,6 +88,8 @@ export function HeroSection() {
   }, []);
 
   const handleMouseMove = (e: React.MouseEvent) => {
+    // Only calculate parallax tilt if user has a fine pointer / mouse
+    if (isMobile) return;
     const { innerWidth, innerHeight } = window;
     const x = (e.clientX - innerWidth / 2) / (innerWidth / 2);
     const y = (e.clientY - innerHeight / 2) / (innerHeight / 2);
@@ -101,6 +103,13 @@ export function HeroSection() {
       className="relative min-h-[100svh] w-full flex flex-col justify-between overflow-hidden bg-[#07080a] text-[#f2f4f7] pt-24 pb-8 px-6 select-none"
       style={{ isolation: 'isolate' }}
     >
+      {/* ── Accessible Skip Link ────────────────────────────────────────── */}
+      <a
+        href="#section-light-block"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-20 focus:left-6 focus:z-[999] focus:rounded-full focus:bg-accent focus:text-[#07080a] focus:px-4 focus:py-2 focus:font-mono focus:text-xs focus:font-semibold focus:shadow-lg"
+      >
+        Skip animation / Explore services
+      </a>
       {/* ── Background Orbit Ring SVG ────────────────────────────────────── */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
         <svg

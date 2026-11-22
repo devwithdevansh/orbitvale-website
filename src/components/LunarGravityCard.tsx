@@ -13,36 +13,40 @@ interface LunarGravityCardProps {
  * LunarGravityCard — Halden-class mouse-tilt physics card.
  *
  * The card tilts toward the cursor using spring physics.
- * A mint highlight follows the pointer (specular-like reflection).
- * On leave, springs back to flat.
+ * A mint highlight follows the pointer (specular reflection).
+ * Only active on pointer:fine & hover:hover devices.
+ * Springs flat on leave or on touch devices.
  */
 export function LunarGravityCard({
   children,
   className = '',
-  maxTilt = 12,
+  maxTilt = 10,
   glowColor = '#7ff3d0',
 }: LunarGravityCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
   const stateRef = useRef({
-    rx: 0, ry: 0,
-    vrx: 0, vry: 0,
-    gx: 50, gy: 50,
+    rx: 0,
+    ry: 0,
+    vrx: 0,
+    vry: 0,
+    gx: 50,
+    gy: 50,
     active: false,
     raf: 0,
   });
 
   useEffect(() => {
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced) return;
+    if (!finePointer || reduced) return;
 
     const card = cardRef.current;
     const glow = glowRef.current;
     if (!card || !glow) return;
-    // Capture in block-scoped consts so closures see non-null types
+
     const cardEl: HTMLDivElement = card;
     const glowEl: HTMLDivElement = glow;
-
     const s = stateRef.current;
 
     const STIFFNESS = 0.09;
@@ -58,18 +62,24 @@ export function LunarGravityCard({
       s.gy = my * 100;
     }
 
-    function onEnter() { s.active = true; }
+    function onEnter() {
+      s.active = true;
+    }
+
     function onLeave() {
       s.active = false;
-      s.ry = 0; s.rx = 0;
-      s.gx = 50; s.gy = 50;
+      s.ry = 0;
+      s.rx = 0;
+      s.gx = 50;
+      s.gy = 50;
     }
 
     cardEl.addEventListener('pointermove', onMove, { passive: true });
     cardEl.addEventListener('pointerenter', onEnter, { passive: true });
     cardEl.addEventListener('pointerleave', onLeave, { passive: true });
 
-    let currentRx = 0, currentRy = 0;
+    let currentRx = 0;
+    let currentRy = 0;
 
     function frame() {
       const ax = (s.rx - currentRx) * STIFFNESS;
@@ -99,16 +109,17 @@ export function LunarGravityCard({
   return (
     <div
       ref={cardRef}
-      className={`relative ${className}`}
-      style={{ willChange: 'transform', transformStyle: 'preserve-3d' }}
+      className={`relative will-change-transform ${className}`}
+      style={{ transformStyle: 'preserve-3d' }}
     >
-      {/* Glow highlight */}
       <div
         ref={glowRef}
-        className="pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-300 z-10"
         aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-10 rounded-2xl opacity-0 transition-opacity duration-300"
       />
       {children}
     </div>
   );
 }
+
+export default LunarGravityCard;

@@ -14,6 +14,7 @@ const PROJECTS = [
     year: '2025',
     tags: ['SaaS', 'React', 'Node.js', 'AWS'],
     index: '01',
+    concept: true,
     challenge:
       'A legacy monolith processing 40 M events/day needed to be reborn as a distributed SaaS platform without a single hour of downtime.',
     approach:
@@ -37,6 +38,7 @@ const PROJECTS = [
     year: '2025',
     tags: ['CMS', 'Next.js', 'TypeScript', 'Edge'],
     index: '02',
+    concept: true,
     challenge:
       "An editorial team at a global media brand was blocked by a monolithic CMS that took 3 seconds per save and couldn't serve content on the edge.",
     approach:
@@ -58,20 +60,21 @@ const PROJECTS = [
     cover: '/covers/orbitdb.svg',
     accent: '#7ff3d0',
     year: '2024',
-    tags: ['Web3', 'Distributed', 'P2P', 'TypeScript'],
+    tags: ['Distributed', 'Rust', 'Wasm', 'P2P'],
     index: '03',
+    concept: true,
     challenge:
-      'A DeFi protocol needed a database layer that worked without any centralised infrastructure, survived node churn, and remained consistent under network partitions.',
+      'Edge applications needed offline-first data synchronization with conflict-free resolution across unreliable satellite and mobile networks.',
     approach:
-      'We designed an CRDT-based distributed log with libp2p gossipsub propagation, local-first writes that merge automatically on reconnection, and an end-to-end encrypted identity layer tied to wallet signatures.',
+      'We engineered an append-only distributed log backed by CRDTs, compiled to WebAssembly for edge runtimes, with zero-copy deserialization in Rust.',
     outcome:
-      'Zero-downtime across 1 400 simultaneous node failures in chaos testing. Writes survive offline for up to 72 hours and merge without conflicts on reconnect.',
+      'Sub-millisecond local reads, verifiable cryptographic audit chains, and automated multi-master synchronization across thousands of active nodes.',
     metrics: [
-      { label: 'Node failures', value: '1400', unit: 'survived in test' },
-      { label: 'Offline writes', value: '72h', unit: 'merge-safe' },
-      { label: 'Conflict rate', value: '0%', unit: 'in production' },
+      { label: 'Read Latency', value: '< 1ms', unit: 'in-memory local' },
+      { label: 'Sync Convergence', value: '100%', unit: 'CRDT state sync' },
+      { label: 'Binary Footprint', value: '180KB', unit: 'optimized wasm' },
     ],
-    stack: ['TypeScript', 'libp2p', 'IPFS', 'CRDTs', 'AES-GCM', 'Rust (WASM)'],
+    stack: ['Rust', 'WebAssembly', 'CRDTs', 'libp2p', 'TypeScript SDK', 'Tokio'],
     next: 'lumen',
   },
   {
@@ -81,43 +84,45 @@ const PROJECTS = [
     cover: '/covers/lumen.svg',
     accent: '#a3e635',
     year: '2024',
-    tags: ['Analytics', 'WebSocket', 'D3', 'ClickHouse'],
+    tags: ['Analytics', 'WebSocket', 'D3', 'Canvas'],
     index: '04',
+    concept: true,
     challenge:
-      'A logistics operator watching 60 000 shipments live needed a dashboard that updated every second without hammering their database.',
+      'Financial operations teams were overwhelmed by delayed tabular feeds and required real-time sub-second visual anomaly detection for millions of transactions.',
     approach:
-      'We built a streaming pipeline from ClickHouse materialized views through a WebSocket multiplexer to a D3-powered canvas renderer. The front end renders 60 000 shipment markers at 60 fps using a spatial index — no DOM manipulation at all.',
+      'Constructed a bespoke WebGL-accelerated timeline engine with reactive WebSocket streams and GPU-buffered line graphs that handle 100,000 data points at 60fps.',
     outcome:
-      'Dashboard latency cut from 8 s to 320 ms. GPU-accelerated canvas renders 60 K markers at 60 fps on a 2018 laptop.',
+      'Zero-lag visual telemetry, 400ms average query latency, and instantaneous anomaly alerting before downstream pipeline saturation.',
     metrics: [
-      { label: 'Latency', value: '320ms', unit: 'down from 8 s' },
-      { label: 'Markers', value: '60K', unit: 'at 60 fps' },
-      { label: 'DB load', value: '−94%', unit: 'vs previous' },
+      { label: 'Framerate', value: '60fps', unit: '100k data points' },
+      { label: 'Query Response', value: '400ms', unit: 'telemetry search' },
+      { label: 'Incident Time', value: '-65%', unit: 'MTTD decrease' },
     ],
-    stack: ['React', 'D3', 'Canvas 2D', 'WebSocket', 'ClickHouse', 'Go', 'Redis'],
+    stack: ['TypeScript', 'WebGL', 'D3.js', 'WebSockets', 'ClickHouse', 'Go'],
     next: 'astra',
   },
   {
     slug: 'astra',
     title: 'Astra',
-    subtitle: 'AI-Powered Analytics',
+    subtitle: 'AI-powered Analytics Engine',
     cover: '/covers/astra.svg',
     accent: '#e879f9',
     year: '2025',
-    tags: ['AI', 'LLM', 'Python', 'RAG'],
+    tags: ['AI/ML', 'Python', 'Vector DB', 'FastAPI'],
     index: '05',
+    concept: true,
     challenge:
-      'A B2B SaaS company wanted their users to ask questions in plain English and get answers from their own data — without exposing raw data to any third-party model.',
+      'Enterprise customers wanted natural language querying over unstructured PDF reports and internal knowledge bases with strict zero-hallucination guardrails.',
     approach:
-      'We built a RAG pipeline that embeds the customer\'s data locally, routes natural-language questions through a fine-tuned intent classifier, retrieves semantically relevant chunks, and generates SQL that runs inside the customer\'s own VPC. No data leaves their network.',
+      'Designed a hybrid sparse-dense retrieval architecture (RAG) with reciprocal rank fusion, local vector embeddings, and deterministic citation verification.',
     outcome:
-      '86 % of analyst ad-hoc queries answered without engineering involvement. Time-to-insight from days to seconds.',
+      '89% top-1 prediction precision, complete compliance auditability with grounded source links, and 3x faster knowledge lookup for research teams.',
     metrics: [
-      { label: 'Queries self-served', value: '86%', unit: 'without engineering' },
-      { label: 'Insight time', value: '−98%', unit: 'days → seconds' },
-      { label: 'Data residency', value: '100%', unit: 'in-VPC' },
+      { label: 'Accuracy', value: '89%', unit: 'top-1 precision' },
+      { label: 'Retrieval', value: '120ms', unit: 'hybrid search' },
+      { label: 'Adoption', value: '4.2×', unit: 'daily active queries' },
     ],
-    stack: ['Python', 'FastAPI', 'pgvector', 'LangChain', 'OpenAI (private)', 'dbt', 'Kubernetes'],
+    stack: ['Python', 'FastAPI', 'Qdrant', 'OpenAI', 'LangChain', 'Next.js'],
     next: 'nova',
   },
   {
@@ -126,21 +131,22 @@ const PROJECTS = [
     subtitle: 'Blockchain Infrastructure',
     cover: '/covers/nova.svg',
     accent: '#f59e0b',
-    year: '2024',
-    tags: ['Blockchain', 'Solidity', 'EVM', 'Security'],
+    year: '2025',
+    tags: ['Web3', 'Solidity', 'Rust', 'EVM'],
     index: '06',
+    concept: true,
     challenge:
-      'A tokenisation platform needed a smart-contract layer for real-world assets that could pass a Big-4 audit, handle 10 000 TPS, and remain upgradeable without breaking existing token holders.',
+      'A cross-chain liquidity bridge required provable validator consensus and low gas overhead without sacrificing smart contract composability.',
     approach:
-      'We designed a diamond-proxy architecture (EIP-2535) with an on-chain governance module for safe upgrades, a permit-2 allowance system for gasless UX, and a formal verification suite that proved the core invariants before submission to audit.',
+      'Implemented optimistic verification protocols with zero-knowledge fraud proofs, modular relayer networks in Rust, and gas-optimized EVM bytecode.',
     outcome:
-      'Passed the security audit with zero critical findings. 10 400 TPS on Polygon zkEVM testnet. \$2.4 B in assets tokenised in first 6 months.',
+      '2.1s average block finality, 80% gas reduction compared to previous generation bridges, and zero vulnerability exploits during rigorous audit cycles.',
     metrics: [
-      { label: 'Audit findings', value: '0', unit: 'critical' },
-      { label: 'Throughput', value: '10.4K', unit: 'TPS on zkEVM' },
-      { label: 'Assets tokenised', value: '$2.4B', unit: 'in 6 months' },
+      { label: 'Finality', value: '2.1s', unit: 'average cross-chain' },
+      { label: 'Gas Cost', value: '-80%', unit: 'per transfer' },
+      { label: 'Audits', value: '3/3', unit: 'clean security audits' },
     ],
-    stack: ['Solidity', 'Hardhat', 'Foundry', 'EIP-2535', 'Polygon zkEVM', 'TypeScript', 'Echidna'],
+    stack: ['Rust', 'Solidity', 'Foundry', 'EVM', 'Circom', 'Subgraphs'],
     next: 'project-phoenix',
   },
 ];
@@ -153,7 +159,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   const project = PROJECTS.find((p) => p.slug === params.slug);
   if (!project) return { title: 'Not found' };
   return {
-    title: `${project.title} — Orbitvale`,
+    title: `${project.title} — Case Study — Orbitvale`,
     description: project.challenge,
   };
 }
@@ -165,10 +171,10 @@ export default function CaseStudyPage({ params }: { params: { slug: string } }) 
   const nextProject = PROJECTS.find((p) => p.slug === project.next)!;
 
   return (
-    <article className="relative min-h-screen overflow-hidden bg-bg">
+    <article className="relative min-h-screen overflow-hidden bg-bg text-ink">
 
       {/* ── Hero ─────────────────────────────────────────────────────── */}
-      <div className="relative h-[70svh] min-h-[500px] w-full overflow-hidden md:h-[80svh]">
+      <div className="relative h-[72svh] min-h-[520px] w-full overflow-hidden md:h-[82svh]">
         {/* Cover image full-bleed */}
         <Image
           src={project.cover}
@@ -181,7 +187,7 @@ export default function CaseStudyPage({ params }: { params: { slug: string } }) 
         <div
           className="absolute inset-0"
           style={{
-            background: `linear-gradient(to bottom, rgba(8,9,11,0.3) 0%, rgba(8,9,11,0.0) 30%, rgba(8,9,11,0.85) 75%, rgba(8,9,11,1) 100%)`,
+            background: `linear-gradient(to bottom, rgba(8,9,11,0.3) 0%, rgba(8,9,11,0.0) 25%, rgba(8,9,11,0.85) 75%, rgba(8,9,11,1) 100%)`,
           }}
         />
         {/* Left accent glow matching project color */}
@@ -194,12 +200,25 @@ export default function CaseStudyPage({ params }: { params: { slug: string } }) 
 
         {/* Hero copy */}
         <div className="absolute inset-x-0 bottom-0 px-6 pb-14 md:px-14 lg:px-20">
-          <p
-            className="mb-4 font-mono text-[11px] uppercase tracking-[0.28em]"
-            style={{ color: project.accent }}
-          >
-            {project.index} / {project.year} · {project.tags.join(' · ')}
-          </p>
+          <div className="mb-4 flex flex-wrap items-center gap-3">
+            <Link
+              href="/work"
+              className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.2em] text-muted hover:text-accent transition-colors focus-visible:ring-1 focus-visible:ring-accent rounded"
+            >
+              ← All Case Studies
+            </Link>
+            <span className="text-dim">/</span>
+            <span
+              className="font-mono text-[11px] uppercase tracking-[0.28em]"
+              style={{ color: project.accent }}
+            >
+              {project.index} · {project.year}
+            </span>
+            <span className="rounded-full border border-line/60 bg-white/5 px-2.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.16em] text-dim">
+              Concept Exploration
+            </span>
+          </div>
+
           <h1 className="mb-3 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl lg:text-6xl xl:text-7xl">
             {project.title}
           </h1>
@@ -208,11 +227,11 @@ export default function CaseStudyPage({ params }: { params: { slug: string } }) 
       </div>
 
       {/* ── Body ─────────────────────────────────────────────────────── */}
-      <div className="mx-auto max-w-5xl px-6 pb-40 pt-20 md:px-14 lg:px-8">
+      <div className="mx-auto max-w-5xl px-6 pb-36 pt-16 md:px-14 lg:px-8">
 
         {/* Metrics strip */}
         <div
-          className="mb-20 grid grid-cols-1 gap-px sm:grid-cols-3"
+          className="mb-20 grid grid-cols-1 gap-px sm:grid-cols-3 rounded-xl overflow-hidden border border-line"
           style={{ background: `${project.accent}20` }}
         >
           {project.metrics.map((m) => (
@@ -237,33 +256,33 @@ export default function CaseStudyPage({ params }: { params: { slug: string } }) 
         {/* Editorial columns */}
         <div className="grid gap-20 md:grid-cols-[1fr_2fr]">
 
-          {/* Left nav col */}
+          {/* Left sticky nav col */}
           <div>
             <div className="sticky top-28">
               <p className="mb-6 font-mono text-[10px] uppercase tracking-[0.26em] text-dim">
                 Contents
               </p>
-              <nav className="flex flex-col gap-3">
+              <nav className="flex flex-col gap-3" aria-label="Case Study Sections">
                 {['Challenge', 'Approach', 'Outcome', 'Stack'].map((s) => (
                   <a
                     key={s}
                     href={`#${s.toLowerCase()}`}
-                    className="font-mono text-xs uppercase tracking-[0.18em] text-muted transition-colors hover:text-accent"
+                    className="font-mono text-xs uppercase tracking-[0.18em] text-muted transition-colors hover:text-accent focus-visible:ring-1 focus-visible:ring-accent rounded p-0.5"
                   >
                     {s}
                   </a>
                 ))}
               </nav>
 
-              <div className="mt-14">
+              <div id="stack" className="mt-14 scroll-mt-28">
                 <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.26em] text-dim">
-                  Stack
+                  Technology Stack
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {project.stack.map((s) => (
                     <span
                       key={s}
-                      className="rounded-full border border-line px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-muted"
+                      className="rounded-full border border-line px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-muted bg-panel"
                     >
                       {s}
                     </span>
@@ -275,26 +294,25 @@ export default function CaseStudyPage({ params }: { params: { slug: string } }) 
 
           {/* Right editorial col */}
           <div className="flex flex-col gap-16">
-            <section id="challenge">
+            <section id="challenge" className="scroll-mt-28">
               <p
                 className="mb-4 font-mono text-[11px] uppercase tracking-[0.26em]"
                 style={{ color: project.accent }}
               >
-                01 · Challenge
+                01 · The Challenge
               </p>
               <p className="text-xl leading-[1.65] text-ink/90 md:text-2xl">
                 {project.challenge}
               </p>
             </section>
 
-            {/* Full-width cover repeat with slight tilt */}
+            {/* Full-width cover repeat */}
             <div
               className="relative h-64 w-full overflow-hidden rounded-2xl border border-line md:h-80"
-              style={{ transform: 'rotate(-0.5deg)' }}
             >
               <Image
                 src={project.cover}
-                alt={`${project.title} detail`}
+                alt={`${project.title} detail visualization`}
                 fill
                 className="object-cover"
               />
@@ -306,24 +324,24 @@ export default function CaseStudyPage({ params }: { params: { slug: string } }) 
               />
             </div>
 
-            <section id="approach">
+            <section id="approach" className="scroll-mt-28">
               <p
                 className="mb-4 font-mono text-[11px] uppercase tracking-[0.26em]"
                 style={{ color: project.accent }}
               >
-                02 · Approach
+                02 · Our Approach
               </p>
               <p className="text-lg leading-[1.75] text-muted md:text-xl">
                 {project.approach}
               </p>
             </section>
 
-            <section id="outcome">
+            <section id="outcome" className="scroll-mt-28">
               <p
                 className="mb-4 font-mono text-[11px] uppercase tracking-[0.26em]"
                 style={{ color: project.accent }}
               >
-                03 · Outcome
+                03 · Measurable Outcome
               </p>
               <p className="text-lg leading-[1.75] text-ink/80 md:text-xl">
                 {project.outcome}
@@ -340,12 +358,12 @@ export default function CaseStudyPage({ params }: { params: { slug: string } }) 
 
         {/* ── Next project ───────────────────────────────────────── */}
         <div>
-          <p className="mb-8 font-mono text-[11px] uppercase tracking-[0.26em] text-dim">
-            Next project
+          <p className="mb-6 font-mono text-[11px] uppercase tracking-[0.26em] text-dim">
+            Next Case Study
           </p>
           <Link
             href={`/work/${nextProject.slug}`}
-            className="group flex items-center justify-between gap-6 rounded-2xl border border-line bg-panel px-8 py-8 transition-colors hover:border-accent/40 hover:bg-panel-2"
+            className="group flex items-center justify-between gap-6 rounded-2xl border border-line bg-panel px-8 py-8 transition-colors hover:border-accent/40 hover:bg-panel-2 focus-visible:ring-2 focus-visible:ring-accent"
           >
             <div>
               <p
@@ -360,7 +378,7 @@ export default function CaseStudyPage({ params }: { params: { slug: string } }) 
               <p className="mt-1 text-muted">{nextProject.subtitle}</p>
             </div>
             <div
-              className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full border transition-colors group-hover:border-accent"
+              className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full border transition-colors group-hover:border-accent group-hover:bg-accent/10"
               style={{ borderColor: `${nextProject.accent}40` }}
             >
               <span className="text-muted group-hover:text-accent transition-colors">→</span>
