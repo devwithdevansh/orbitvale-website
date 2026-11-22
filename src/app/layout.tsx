@@ -3,15 +3,17 @@ import localFont from 'next/font/local';
 import './globals.css';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
+import { NextPageTransition } from '@/components/NextPageTransition';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import { SmoothScroll } from '@/components/SmoothScroll';
+import { JourneyProvider } from '@/context/JourneyContext';
 import { WarpTunnel } from '@/components/WarpTunnel';
 import { CustomCursor } from '@/components/CustomCursor';
 import { AmbientSound } from '@/components/AmbientSound';
 
 /**
  * Syne — display / heading font.
- * Self-hosted WOFF2 so npm run build works without network access.
+ * Self-hosted WOFF2 for zero-network build reliability.
  */
 const syne = localFont({
   src: [
@@ -88,15 +90,18 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`dark ${syne.variable} ${jetbrainsMono.variable}`}>
-      <body className="font-sans antialiased">
+      <body className="font-sans antialiased bg-[#08090b] text-[#f4f4f6]">
         <SmoothScroll>
-          <CustomCursor />
-          <AmbientSound />
-          <WarpTunnel />
-          <ScrollProgress />
-          <Nav />
-          <main>{children}</main>
-          <Footer />
+          <JourneyProvider>
+            <CustomCursor />
+            <AmbientSound />
+            <WarpTunnel />
+            <ScrollProgress />
+            <Nav />
+            <main id="main-content">{children}</main>
+            <Footer />
+            <NextPageTransition />
+          </JourneyProvider>
         </SmoothScroll>
       </body>
     </html>

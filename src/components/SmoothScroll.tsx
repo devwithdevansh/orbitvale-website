@@ -17,12 +17,14 @@ interface LenisContextValue {
   lenis: Lenis | null;
   scrollToTop: (immediate?: boolean) => void;
   scrollToHash: (hash: string) => void;
+  scrollToElement: (el: HTMLElement, immediate?: boolean) => void;
 }
 
 const LenisContext = createContext<LenisContextValue>({
   lenis: null,
   scrollToTop: () => {},
   scrollToHash: () => {},
+  scrollToElement: () => {},
 });
 
 export function useLenis() {
@@ -30,10 +32,11 @@ export function useLenis() {
 }
 
 /**
- * Route Scroll & Navigation Coordinator
- * Ensures new routes ALWAYS land at the true top, below the fixed header.
- * Respects fragment/hash navigation (e.g. /work/project-phoenix#challenge).
- * Cancels residual Lenis momentum across page switches.
+ * Route Scroll & Bidirectional Navigation Coordinator
+ * - Normal forward navigation: Lands immediately at scroll position 0 (page top).
+ * - Reverse navigation (nav=reverse): Lands with the NextPageTransition panel in full view.
+ * - Fragment/hash navigation: Scrolls to target with fixed header clearance.
+ * - Clears residual Lenis momentum across page switches to prevent skipping.
  */
 function NavigationScrollCoordinator({ lenis }: { lenis: Lenis | null }) {
   const pathname = usePathname();
@@ -41,27 +44,47 @@ function NavigationScrollCoordinator({ lenis }: { lenis: Lenis | null }) {
   const prevPathRef = useRef(pathname);
 
   useEffect(() => {
-    // Only act when navigating to a DIFFERENT pathname
-    if (prevPathRef.current === pathname) {
-      return;
-    }
+    const isNewPath = prevPathRef.current !== pathname;
     prevPathRef.current = pathname;
 
-    // Check for fragment hash
+    const isReverse = searchParams.get('nav') === 'reverse';
     const hash = window.location.hash;
 
-    // Stop ongoing momentum from previous page
+    // Stop ongoing momentum from the prior route
     if (lenis) {
       lenis.stop();
     }
 
-    if (hash) {
-      // Allow DOM to commit before scrolling to hash target
+    if (isReverse) {
+      // Land on the previous page's NextPageTransition panel
+      const timeoutId = setTimeout(() => {
+        const panelEl = document.getElementById('next-page-transition');
+        if (panelEl) {
+          const top = panelEl.getBoundingClientRect().top + window.scrollY;
+          if (lenis) {
+            lenis.scrollTo(top, { immediate: true });
+            lenis.start();
+            lenis.resize();
+          } else {
+            window.scrollTo({ top, behavior: 'instant' });
+          }
+        } else {
+          // Fallback to top if panel not found
+          window.scrollTo(0, 0);
+          if (lenis) {
+            lenis.scrollTo(0, { immediate: true });
+            lenis.start();
+          }
+        }
+      }, 50);
+      return () => clearTimeout(timeoutId);
+    } else if (hash && hash !== '#next-page-transition') {
+      // Normal fragment anchor
       const timeoutId = setTimeout(() => {
         const targetId = hash.replace(/^#/, '');
         const targetEl = document.getElementById(targetId);
         if (targetEl) {
-          const headerOffset = 90; // Fixed header clearance
+          const headerOffset = 90;
           const top = targetEl.getBoundingClientRect().top + window.scrollY - headerOffset;
           if (lenis) {
             lenis.start();
@@ -70,24 +93,22 @@ function NavigationScrollCoordinator({ lenis }: { lenis: Lenis | null }) {
             window.scrollTo({ top, behavior: 'smooth' });
           }
         } else {
-          // Target not found; default to top
-          if (lenis) {
-            lenis.start();
-            lenis.scrollTo(0, { immediate: true });
-          }
           window.scrollTo(0, 0);
+          if (lenis) {
+            lenis.scrollTo(0, { immediate: true });
+            lenis.start();
+          }
         }
       }, 50);
       return () => clearTimeout(timeoutId);
-    } else {
-      // Normal route navigation: land immediately at the top
+    } else if (isNewPath) {
+      // Default: Land at true top of the new page
       window.scrollTo(0, 0);
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
 
       if (lenis) {
         lenis.scrollTo(0, { immediate: true });
-        // Resume Lenis tracking on the new page
         requestAnimationFrame(() => {
           lenis.start();
           lenis.resize();
@@ -99,11 +120,6 @@ function NavigationScrollCoordinator({ lenis }: { lenis: Lenis | null }) {
   return null;
 }
 
-/**
- * SmoothScroll Provider
- * Wraps the app in Lenis smooth scroll with path-aware resets,
- * reduced-motion bypass, and context access for programmatic navigation.
- */
 export function SmoothScroll({ children }: { children: ReactNode }) {
   const [lenisInstance, setLenisInstance] = useState<Lenis | null>(null);
 
@@ -156,8 +172,24 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     }
   };
 
+  const scrollToElement = (el: HTMLElement, immediate = false) => {
+    const top = el.getBoundingClientRect().top + window.scrollY;
+    if (lenisInstance) {
+      lenisInstance.scrollTo(top, { immediate, duration: 0.8 });
+    } else {
+      window.scrollTo({ top, behavior: immediate ? 'instant' : 'smooth' });
+    }
+  };
+
   return (
-    <LenisContext.Provider value={{ lenis: lenisInstance, scrollToTop, scrollToHash }}>
+    <LenisContext.Provider
+      value={{
+        lenis: lenisInstance,
+        scrollToTop,
+        scrollToHash,
+        scrollToElement,
+      }}
+    >
       <Suspense fallback={null}>
         <NavigationScrollCoordinator lenis={lenisInstance} />
       </Suspense>
@@ -165,3 +197,5 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     </LenisContext.Provider>
   );
 }
+
+export default SmoothScroll;

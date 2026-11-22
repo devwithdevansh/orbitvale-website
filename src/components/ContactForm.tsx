@@ -13,6 +13,7 @@ const PROJECT_TYPES = [
 
 interface FormState {
   status: 'idle' | 'submitting' | 'success' | 'error';
+  transport?: 'email' | 'logged';
   errorMessage: string | null;
   successMessage: string | null;
 }
@@ -82,7 +83,7 @@ export function ContactForm() {
           budget: budget || 'Not specified',
           projectTypes: selectedTypes,
           body: body.trim(),
-          website: honeypot, // Honeypot
+          website: honeypot,
         }),
       });
 
@@ -94,8 +95,9 @@ export function ContactForm() {
 
       setFormState({
         status: 'success',
+        transport: data.transport || 'logged',
         errorMessage: null,
-        successMessage: data.message || "Thank you. We've received your inquiry and will respond within 24 hours.",
+        successMessage: data.message || "Thank you. We've received your inquiry.",
       });
 
       // Clear fields only on confirmed success
@@ -121,6 +123,8 @@ export function ContactForm() {
   };
 
   if (formState.status === 'success') {
+    const isLiveDelivered = formState.transport === 'email';
+
     return (
       <div className="py-12 text-center flex flex-col items-center">
         <div className="h-16 w-16 rounded-full border border-accent/60 bg-accent/15 flex items-center justify-center text-accent mb-6 shadow-[0_0_30px_rgba(127,243,208,0.3)]">
@@ -128,12 +132,30 @@ export function ContactForm() {
             <polyline points="20 6 9 17 4 12" />
           </svg>
         </div>
+
         <h3 className="font-display text-2xl font-semibold text-ink mb-3">
-          Transmission Received
+          {isLiveDelivered ? 'Transmission Delivered' : 'Transmission Logged'}
         </h3>
-        <p className="text-muted max-w-md text-sm leading-relaxed mb-8">
+
+        {!isLiveDelivered && (
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-3.5 py-1 font-mono text-[10px] uppercase tracking-[0.2em] text-accent">
+            <span>● Environment Status: Server Logged (Demo Mode)</span>
+          </div>
+        )}
+
+        <p className="text-muted max-w-md text-sm leading-relaxed mb-6">
           {formState.successMessage}
         </p>
+
+        {!isLiveDelivered && (
+          <p className="text-xs text-dim mb-8 max-w-sm">
+            Direct frequency is also active at{' '}
+            <a href="mailto:hello@orbitvale.com" className="text-accent underline font-mono">
+              hello@orbitvale.com
+            </a>
+          </p>
+        )}
+
         <button
           type="button"
           onClick={handleReset}

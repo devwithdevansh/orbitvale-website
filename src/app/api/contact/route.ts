@@ -15,7 +15,7 @@ const rateLimitMap = new Map<string, { count: number; timestamp: number }>();
 
 function isRateLimited(ip: string): boolean {
   const now = Date.now();
-  const windowMs = 60 * 1000; // 1 minute window
+  const windowMs = 60 * 1000;
   const maxRequests = 5;
 
   const entry = rateLimitMap.get(ip);
@@ -35,7 +35,7 @@ function isRateLimited(ip: string): boolean {
 
 function sanitize(input: string): string {
   return input
-    .replace(/<[^>]*>/g, '') // Strip HTML tags
+    .replace(/<[^>]*>/g, '')
     .replace(/[\r\n]+/g, ' ')
     .trim();
 }
@@ -55,10 +55,10 @@ export async function POST(req: Request) {
 
     const data: ContactPayload = await req.json();
 
-    // 1. Honeypot check (bots that fill hidden fields get silently completed)
+    // 1. Honeypot check
     if (data.website && data.website.trim().length > 0) {
       return NextResponse.json(
-        { success: true, message: 'Message submitted successfully.' },
+        { success: true, transport: 'honeypot', message: 'Message submitted successfully.' },
         { status: 200 }
       );
     }
@@ -110,8 +110,9 @@ export async function POST(req: Request) {
       ip,
     };
 
-    // 3. Provider Integration
-    // If RESEND_API_KEY is configured in env, send email via Resend
+    let deliveredViaResend = false;
+
+    // 3. Provider Integration (Resend API)
     if (process.env.RESEND_API_KEY) {
       try {
         const targetEmail = process.env.CONTACT_EMAIL || 'hello@orbitvale.com';
@@ -130,25 +131,40 @@ export async function POST(req: Request) {
           }),
         });
 
-        if (!resendRes.ok) {
+        if (resendRes.ok) {
+          deliveredViaResend = true;
+        } else {
           const resendErr = await resendRes.text();
           console.error('[Resend Error]', resendErr);
-          // Still fallback to server log so inquiry is not lost
         }
       } catch (sendErr) {
         console.error('[Email Dispatch Error]', sendErr);
       }
     }
 
-    // Always log submission to server output
-    console.log('─── [NEW ORBITVALE INQUIRY] ───');
+    // Always log to server console
+    console.log('─── [ORBITVALE INQUIRY CAPTURED] ───');
     console.log(JSON.stringify(cleanSubmission, null, 2));
-    console.log('────────────────────────────────');
+    console.log('Transport status:', deliveredViaResend ? 'Delivered via Resend' : 'Logged to server (No RESEND_API_KEY)');
+    console.log('────────────────────────────────────');
 
+    if (deliveredViaResend) {
+      return NextResponse.json(
+        {
+          success: true,
+          transport: 'email',
+          message: "Thank you for reaching out. We've received your inquiry and will respond within 24 hours.",
+        },
+        { status: 200 }
+      );
+    }
+
+    // Honest reporting when no live transport is configured
     return NextResponse.json(
       {
         success: true,
-        message: "Thank you for reaching out. We've received your inquiry and will respond within 24 hours.",
+        transport: 'logged',
+        message: 'Inquiry validated and recorded in our studio server log. Note: External email transport is not configured in this environment; for active proposals, please email hello@orbitvale.com directly.',
       },
       { status: 200 }
     );
