@@ -3,7 +3,9 @@ export interface RouteStage {
   nextRoute: string | null;
   prevRoute: string | null;
   nextHeading: string;
+  prevHeading: string;
   nextLabel: string;
+  prevLabel: string;
   subtext: string;
 }
 
@@ -13,7 +15,9 @@ export const ROUTE_STAGES: Record<string, RouteStage> = {
     nextRoute: '/work',
     prevRoute: null,
     nextHeading: 'SELECTED WORK',
-    nextLabel: 'Work · 02',
+    prevHeading: '',
+    nextLabel: '02 / 05',
+    prevLabel: '',
     subtext: 'Case studies across platform engineering, distributed systems, and real-time interfaces.',
   },
   '/work': {
@@ -21,7 +25,9 @@ export const ROUTE_STAGES: Record<string, RouteStage> = {
     nextRoute: '/services',
     prevRoute: '/',
     nextHeading: 'OUR SERVICES',
-    nextLabel: 'Services · 03',
+    prevHeading: 'HOME',
+    nextLabel: '03 / 05',
+    prevLabel: '01 / 05',
     subtext: 'Full-stack product engineering, experience design, interactive 3D, and strategy.',
   },
   '/services': {
@@ -29,7 +35,9 @@ export const ROUTE_STAGES: Record<string, RouteStage> = {
     nextRoute: '/about',
     prevRoute: '/work',
     nextHeading: 'ABOUT ORBITVALE',
-    nextLabel: 'About · 04',
+    prevHeading: 'SELECTED WORK',
+    nextLabel: '04 / 05',
+    prevLabel: '02 / 05',
     subtext: 'Bold tech with editorial restraint. Our principles, culture, and the orbit so far.',
   },
   '/about': {
@@ -37,16 +45,20 @@ export const ROUTE_STAGES: Record<string, RouteStage> = {
     nextRoute: '/contact',
     prevRoute: '/services',
     nextHeading: "LET'S CONNECT",
-    nextLabel: 'Contact · 05',
+    prevHeading: 'OUR SERVICES',
+    nextLabel: '05 / 05',
+    prevLabel: '03 / 05',
     subtext: "Tell us what you're building. We'll map the orbit together.",
   },
   '/contact': {
     pathname: '/contact',
     nextRoute: null,
     prevRoute: '/about',
-    nextHeading: 'ORBIT COMPLETE',
-    nextLabel: 'Return Home · 01',
-    subtext: 'You have reached the end of the orbit journey. Return to the homepage to explore again.',
+    nextHeading: '',
+    prevHeading: 'ABOUT ORBITVALE',
+    nextLabel: '',
+    prevLabel: '04 / 05',
+    subtext: '',
   },
 };
 
@@ -57,7 +69,9 @@ export function getRouteStage(pathname: string): RouteStage {
       nextRoute: '/services',
       prevRoute: '/work',
       nextHeading: 'OUR SERVICES',
-      nextLabel: 'Services · 03',
+      prevHeading: 'SELECTED WORK',
+      nextLabel: '03 / 05',
+      prevLabel: '02 / 05',
       subtext: 'Full-stack product engineering, experience design, interactive 3D, and strategy.',
     };
   }

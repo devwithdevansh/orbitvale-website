@@ -98,7 +98,9 @@ export default function RootLayout({
             <WarpTunnel />
             <ScrollProgress />
             <Nav />
-            <main id="main-content">{children}</main>
+            <main id="main-content">
+              {children}
+            </main>
             <Footer />
             <NextPageTransition />
           </JourneyProvider>

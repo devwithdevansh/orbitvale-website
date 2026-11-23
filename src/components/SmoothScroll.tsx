@@ -44,40 +44,61 @@ function NavigationScrollCoordinator({ lenis }: { lenis: Lenis | null }) {
   const prevPathRef = useRef(pathname);
 
   useEffect(() => {
+    if (!lenis) return;
+
+    // Ensure Lenis is always running
+    lenis.start();
+
     const isNewPath = prevPathRef.current !== pathname;
     prevPathRef.current = pathname;
 
     const isReverse = searchParams.get('nav') === 'reverse';
     const hash = window.location.hash;
 
-    // Stop ongoing momentum from the prior route
-    if (lenis) {
-      lenis.stop();
-    }
-
     if (isReverse) {
-      // Land on the previous page's NextPageTransition panel
-      const timeoutId = setTimeout(() => {
-        const panelEl = document.getElementById('next-page-transition');
-        if (panelEl) {
-          const top = panelEl.getBoundingClientRect().top + window.scrollY;
-          if (lenis) {
-            lenis.scrollTo(top, { immediate: true });
-            lenis.start();
-            lenis.resize();
-          } else {
-            window.scrollTo({ top, behavior: 'instant' });
-          }
-        } else {
-          // Fallback to top if panel not found
-          window.scrollTo(0, 0);
-          if (lenis) {
-            lenis.scrollTo(0, { immediate: true });
-            lenis.start();
-          }
+      // Land on the previous page's NextPageTransition panel at bottom (p = 0)
+      const scrollToReverse = () => {
+        const trackEl = document.getElementById('next-page-transition');
+        const docH = document.documentElement.scrollHeight;
+        const winH = window.innerHeight;
+        const maxScroll = Math.max(0, docH - winH);
+
+        let targetY = maxScroll;
+        if (trackEl) {
+          const trackTop = trackEl.getBoundingClientRect().top + window.scrollY;
+          const stripH = window.innerWidth < 640 ? 190 : window.innerWidth < 1024 ? 200 : 210;
+          // Exact coordinate where rect.top = winH - stripH, meaning strip is flush at bottom and p = 0
+          targetY = Math.max(0, Math.min(maxScroll, Math.round(trackTop - (winH - stripH))));
         }
-      }, 50);
-      return () => clearTimeout(timeoutId);
+
+        if (lenis) {
+          lenis.scrollTo(targetY, { immediate: true });
+          lenis.resize();
+        } else {
+          window.scrollTo(0, targetY);
+        }
+      };
+
+      // Immediate scroll
+      scrollToReverse();
+      // Re-apply on next paint and short timer to ensure deferred layout hydration is captured
+      const rafId = requestAnimationFrame(scrollToReverse);
+      const timerId = setTimeout(() => {
+        scrollToReverse();
+        if (lenis) {
+          lenis.start();
+          lenis.resize();
+        }
+        // Clean up URL query param so refresh doesn't trigger reverse landing again
+        if (typeof window !== 'undefined' && window.location.search.includes('nav=reverse')) {
+          window.history.replaceState({}, '', pathname);
+        }
+      }, 70);
+
+      return () => {
+        cancelAnimationFrame(rafId);
+        clearTimeout(timerId);
+      };
     } else if (hash && hash !== '#next-page-transition') {
       // Normal fragment anchor
       const timeoutId = setTimeout(() => {
@@ -86,34 +107,29 @@ function NavigationScrollCoordinator({ lenis }: { lenis: Lenis | null }) {
         if (targetEl) {
           const headerOffset = 90;
           const top = targetEl.getBoundingClientRect().top + window.scrollY - headerOffset;
-          if (lenis) {
-            lenis.start();
-            lenis.scrollTo(top, { immediate: false, duration: 0.6 });
-          } else {
-            window.scrollTo({ top, behavior: 'smooth' });
-          }
+          lenis.start();
+          lenis.scrollTo(top, { immediate: false, duration: 0.6 });
         } else {
           window.scrollTo(0, 0);
-          if (lenis) {
-            lenis.scrollTo(0, { immediate: true });
-            lenis.start();
-          }
+          lenis.scrollTo(0, { immediate: true });
+          lenis.start();
         }
       }, 50);
       return () => clearTimeout(timeoutId);
     } else if (isNewPath) {
-      // Default: Land at true top of the new page
+      // Land at true top of the new page
       window.scrollTo(0, 0);
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
 
-      if (lenis) {
-        lenis.scrollTo(0, { immediate: true });
-        requestAnimationFrame(() => {
-          lenis.start();
-          lenis.resize();
-        });
-      }
+      lenis.scrollTo(0, { immediate: true });
+      requestAnimationFrame(() => {
+        lenis.start();
+        lenis.resize();
+      });
+    } else {
+      // Current path: guarantee Lenis is active
+      lenis.start();
     }
   }, [pathname, searchParams, lenis]);
 
@@ -129,7 +145,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     }
 
     const lenis = new Lenis({
-      duration: 1.15,
+      duration: 1.0,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
       syncTouch: false,

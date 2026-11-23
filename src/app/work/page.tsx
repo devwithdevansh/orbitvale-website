@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { WorksWheel } from '@/components/WorksWheel';
+import { OrbitGallery } from '@/components/OrbitGallery';
 
 export const metadata: Metadata = {
   title: 'Work — Orbitvale',
@@ -70,25 +70,37 @@ export default function WorkPage() {
     <div className="pt-28 pb-32 px-6">
       <div className="mx-auto max-w-6xl">
 
-        {/* Hero */}
-        <p className="mb-6 font-mono text-[11px] uppercase tracking-[0.26em] text-accent">
-          Selected work
-        </p>
-        <h1 className="mb-6 max-w-[18ch] font-display text-4xl font-semibold leading-[1.0] tracking-tight text-ink md:text-6xl">
-          Products built<br />
-          <span className="text-ink/40">for orbit.</span>
-        </h1>
-        <p className="mb-14 max-w-xl text-lg leading-relaxed text-muted">
-          Six case studies across SaaS, infrastructure, analytics, and Web3.
-          Each one starts with a business centre of gravity — everything else orbits that.
-        </p>
+        {/* ── Arrival Hero Screen (Refined 58–62vh spacing) ── */}
+        <section className="min-h-[58vh] sm:min-h-[62vh] flex flex-col justify-between pb-8 mb-14 select-none border-b border-line/20">
+          {/* Top metadata tag */}
+          <div className="flex items-center justify-between border-b border-line/20 pb-4">
+            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
+              Work // 02
+            </span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-dim">
+              Six Products · Case Studies
+            </span>
+          </div>
 
-        {/* 3D Wheel Showcase */}
+          {/* Bottom-left anchored title */}
+          <div className="mt-auto pt-8">
+            <h1 className="font-display font-semibold uppercase text-ink tracking-tight leading-[0.92] text-[46px] sm:text-[68px] md:text-[92px]">
+              SELECTED<br />
+              <span className="text-accent">WORK</span>
+            </h1>
+            <p className="mt-5 max-w-xl text-base sm:text-lg leading-relaxed text-muted font-normal">
+              Products built for orbit. Six case studies across SaaS, infrastructure, analytics, and Web3.
+            </p>
+            <div className="mt-8 flex items-center gap-3 text-dim font-mono text-xs uppercase tracking-[0.22em]">
+              <span className="text-accent animate-pulse">↓</span>
+              <span>Scroll to explore projects</span>
+            </div>
+          </div>
+        </section>
+
+        {/* 3D Orbit Gallery Showcase */}
         <div className="mb-20">
-          <p className="mb-4 font-mono text-[10px] uppercase tracking-[0.22em] text-dim">
-            Interactive Shelf · Drag to browse
-          </p>
-          <WorksWheel />
+          <OrbitGallery projects={PROJECTS} />
         </div>
 
         {/* Project list — editorial numbered rows */}
@@ -97,7 +109,8 @@ export default function WorkPage() {
             <Link
               key={p.slug}
               href={`/work/${p.slug}`}
-              className="group flex flex-col gap-4 border-t border-line py-8 transition-colors duration-300 hover:border-accent/30 md:flex-row md:items-center md:gap-0"
+              data-project-index={i}
+              className="group relative flex flex-col gap-4 border-t border-line py-8 transition-colors duration-300 hover:border-accent/30 md:flex-row md:items-center md:gap-0"
             >
               {/* Number */}
               <span

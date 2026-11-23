@@ -38,3 +38,8 @@ prompts.txt
 
 # Misc
 coverage/
+
+#screen recordings
+*.mp4
+*.zip
+*.patch

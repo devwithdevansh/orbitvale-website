@@ -147,3 +147,83 @@ html {
     opacity: 1;
   }
 }
+
+/* ── Lusion-style Diagonal Sweep Handoff ────────────────────────────────── */
+@keyframes diagonalSweepTLIn {
+  0% {
+    clip-path: polygon(0 0, 0 0, 0 0);
+  }
+  100% {
+    clip-path: polygon(0 0, 135% 0, 0 135%);
+  }
+}
+
+@keyframes diagonalSweepBRIn {
+  0% {
+    clip-path: polygon(100% 100%, 100% 100%, 100% 100%);
+  }
+  100% {
+    clip-path: polygon(100% 100%, -35% 100%, 100% -35%);
+  }
+}
+
+@keyframes diagonalSweepTLOut {
+  0% {
+    clip-path: polygon(0 0, 135% 0, 0 135%);
+  }
+  100% {
+    clip-path: polygon(135% 0, 135% 0, 0 135%);
+  }
+}
+
+@keyframes diagonalSweepBROut {
+  0% {
+    clip-path: polygon(100% 100%, -35% 100%, 100% -35%);
+  }
+  100% {
+    clip-path: polygon(-35% 100%, -35% 100%, 100% -35%);
+  }
+}
+
+.diagonal-sweep-tl-in {
+  animation: diagonalSweepTLIn 350ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.diagonal-sweep-br-in {
+  animation: diagonalSweepBRIn 350ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.diagonal-sweep-tl-out {
+  animation: diagonalSweepTLOut 300ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.diagonal-sweep-br-out {
+  animation: diagonalSweepBROut 300ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* ── Downward Blade Handoff (Reverse Transition) ────────────────────────── */
+@keyframes downwardBladeIn {
+  0% {
+    transform: translateY(-102%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
+}
+
+@keyframes downwardBladeOut {
+  0% {
+    transform: translateY(0%);
+  }
+  100% {
+    transform: translateY(102%);
+  }
+}
+
+.downward-blade-in {
+  animation: downwardBladeIn 350ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.downward-blade-out {
+  animation: downwardBladeOut 300ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}

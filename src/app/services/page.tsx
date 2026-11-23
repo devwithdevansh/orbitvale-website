@@ -78,28 +78,39 @@ const DETAILS = [
 
 export default function ServicesPage() {
   return (
-    <div className="pt-16">
-      {/* Hero */}
-      <div className="px-6 pt-12 pb-0">
-        <div className="mx-auto max-w-5xl">
-          <p className="mb-6 font-mono text-[11px] uppercase tracking-[0.26em] text-accent">Services</p>
-          <h1 className="mb-6 max-w-[20ch] text-4xl font-semibold leading-[1.0] tracking-tight text-ink md:text-6xl">
-            Six capabilities.<br />
-            <span className="text-ink/40">One orbit.</span>
-          </h1>
-          <p className="mb-0 max-w-xl text-lg leading-relaxed text-muted">
-            We don't offer services — we offer positions on the orbit. Each capability has a distinct job and
-            a distinct distance from your centre. All six keep circling until the work is done.
-          </p>
-        </div>
-      </div>
+    <div className="pt-28 pb-32 px-6">
+      <div className="mx-auto max-w-6xl">
+        {/* ── Arrival Hero Screen — tighter on desktop so title reads close to header ── */}
+        <section className="min-h-[44vh] sm:min-h-[50vh] lg:min-h-[44vh] flex flex-col justify-between pb-8 mb-14 select-none border-b border-line/20">
+          <div className="flex items-center justify-between border-b border-line/20 pb-4">
+            <span className="font-mono text-[11px] uppercase tracking-[0.26em] text-accent">
+              Services // 03
+            </span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-dim">
+              Six Capabilities · One Orbit
+            </span>
+          </div>
 
-      {/* Live orbital diagram */}
-      <ServicesOrbit />
+          <div className="mt-auto pt-8">
+            <h1 className="font-display font-semibold uppercase text-ink tracking-tight leading-[0.92] text-[46px] sm:text-[68px] md:text-[92px]">
+              OUR<br />
+              <span className="text-accent">SERVICES</span>
+            </h1>
+            <p className="mt-5 max-w-xl text-base sm:text-lg leading-relaxed text-muted font-normal">
+              We don't offer services — we offer positions on the orbit. Each capability has a distinct job and distance from your centre.
+            </p>
+            <div className="mt-8 flex items-center gap-3 text-dim font-mono text-xs uppercase tracking-[0.22em]">
+              <span className="text-accent animate-pulse">↓</span>
+              <span>Scroll to explore capabilities</span>
+            </div>
+          </div>
+        </section>
 
-      {/* Detail grid */}
-      <div className="px-6 py-20">
-        <div className="mx-auto max-w-5xl">
+        {/* Live orbital diagram */}
+        <ServicesOrbit />
+
+        {/* Detail grid */}
+        <div className="py-20">
           <p className="mb-12 font-mono text-[11px] uppercase tracking-[0.26em] text-dim">What each orbit does</p>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {DETAILS.map((s) => (

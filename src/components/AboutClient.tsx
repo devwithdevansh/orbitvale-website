@@ -121,43 +121,67 @@ function TimelineRow({ year, label, copy, index }: { year: string; label: string
 
 export function AboutClient() {
   return (
-    <div className="px-6 pb-32 pt-28">
-      <div className="mx-auto max-w-4xl">
+    <div className="px-6 pb-32">
+      <div className="mx-auto max-w-6xl">
 
-        {/* Hero */}
-        <p className="mb-6 font-mono text-[11px] uppercase tracking-[0.26em] text-accent">About</p>
-        <TextReveal
-          text="Bold tech. Editorial restraint."
-          as="h1"
-          className="mb-10 font-display text-4xl font-semibold leading-[1.0] tracking-tight text-ink md:text-6xl"
-          stagger={55}
-          duration={900}
-          threshold={0.1}
-        />
-        <p className="mb-20 max-w-2xl text-lg leading-relaxed text-muted">
-          Orbitvale is an IT company that treats digital products like places you can inhabit —
-          one continuous camera, one object, every chapter a stop on the orbit. We blend
-          Lusion-grade immersion with Halden-style silence: loud when it earns the frame,
-          quiet when the copy should breathe.
-        </p>
+        {/* ── Arrival Hero Screen — tighter on desktop ── */}
+        <section className="min-h-[44vh] sm:min-h-[50vh] lg:min-h-[44vh] flex flex-col justify-between pt-24 pb-8 select-none border-b border-line/20 mb-14">
+          {/* Top metadata tag */}
+          <div className="flex items-center justify-between border-b border-line/20 pb-4">
+            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
+              About // 04
+            </span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-dim">
+              Studio Principles · 2026
+            </span>
+          </div>
 
-        {/* Stats strip */}
-        <div className="mb-20 grid grid-cols-2 gap-6 md:grid-cols-4">
-          {STATS.map((s) => (
-            <AnimatedStat key={s.label} value={s.value} label={s.label} />
-          ))}
-        </div>
-
-        <div className="mb-20 h-px w-full bg-line" />
-
-        {/* Principles */}
-        <p className="mb-8 font-mono text-[11px] uppercase tracking-[0.26em] text-dim">How we work</p>
-        <div className="mb-24 grid gap-6 sm:grid-cols-2">
-          {PRINCIPLES.map((p) => (
-            <div
-              key={p.title}
-              className="rounded-xl border border-line bg-panel p-7 transition-colors duration-300 hover:border-accent/30"
+          {/* Bottom-left anchored page name */}
+          <div className="mt-auto pt-8">
+            <h1
+              className="font-display font-semibold uppercase text-ink tracking-tight leading-[0.92] text-[46px] sm:text-[68px] md:text-[92px]"
             >
+              ABOUT<br />
+              <span className="text-accent">ORBITVALE</span>
+            </h1>
+
+            <p className="mt-5 max-w-xl text-base sm:text-lg leading-relaxed text-muted font-normal">
+              Bold tech. Editorial restraint. Digital experiences that orbit your business gravity.
+            </p>
+
+            <div className="mt-8 flex items-center gap-3 text-dim font-mono text-xs uppercase tracking-[0.22em]">
+              <span className="text-accent animate-pulse">↓</span>
+              <span>Scroll to explore studio ethos</span>
+            </div>
+          </div>
+        </section>
+
+        {/* Narrative & Content */}
+        <div className="max-w-4xl mx-auto">
+          <p className="mb-20 max-w-2xl text-lg leading-relaxed text-muted">
+            Orbitvale is an IT company that treats digital products like places you can inhabit —
+            one continuous camera, one object, every chapter a stop on the orbit. We blend
+            Lusion-grade immersion with Halden-style silence: loud when it earns the frame,
+            quiet when the copy should breathe.
+          </p>
+
+          {/* Stats strip */}
+          <div className="mb-20 grid grid-cols-2 gap-6 md:grid-cols-4">
+            {STATS.map((s) => (
+              <AnimatedStat key={s.label} value={s.value} label={s.label} />
+            ))}
+          </div>
+
+          <div className="mb-20 h-px w-full bg-line" />
+
+          {/* Principles */}
+          <p className="mb-8 font-mono text-[11px] uppercase tracking-[0.26em] text-dim">How we work</p>
+          <div className="mb-24 grid gap-6 sm:grid-cols-2">
+            {PRINCIPLES.map((p) => (
+              <div
+                key={p.title}
+                className="rounded-xl border border-line bg-panel p-7 transition-colors duration-300 hover:border-accent/30"
+              >
               <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg border border-line-2 bg-panel-2 font-mono text-base font-bold text-accent">
                 {p.glyph}
               </div>
@@ -211,5 +235,6 @@ export function AboutClient() {
         </div>
       </div>
     </div>
+  </div>
   );
 }
