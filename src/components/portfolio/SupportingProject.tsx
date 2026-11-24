@@ -1,0 +1,12 @@
+import Link from 'next/link';
+import {getProject} from '@/lib/projects';
+import './portfolio.css';
+const detail:{[key:string]:{num:string;intro:string;objective:string;assetNote:string}}={
+ 'raj-tourism':{num:'01',intro:'Travel experiences, presented through the website.',objective:'Destination discovery and tourism package presentation, as represented by the original project material.',assetNote:'Original team-supplied laptop and mobile compositions. Live deployment, features and project outcomes are not claimed without verification.'},
+ 'om-studypoint':{num:'02',intro:'A digital presence for a learning-focused organisation.',objective:'Education-focused content and responsive interface presentation, as evidenced by the supplied screenshots.',assetNote:'Original team-supplied device compositions. Commercial outcome and commissioning details are not yet verified.'},
+ 'raj-traders':{num:'03',intro:'Products and commerce, given a clearer digital home.',objective:'Product presentation through supplied homepage, product-section and tablet artwork.',assetNote:'Original team-supplied layouts. Any ecommerce, inventory or payment features require further evidence.'}
+};
+export function SupportingProject({slug}:{slug:string}){
+ const p=getProject(slug),d=detail[slug];if(!p||!d)return null;
+ return <main className="ov07-support"><div className="ov07-support-inner"><div className="ov07-rail"><span>ORBITVALE / CUSTOM SOLUTIONS / {d.num}</span><Link href="/work/custom-solutions">← ALL CUSTOM WORK</Link></div><section className="ov07-support-intro"><p className="ov07-eyebrow">{p.industry.toUpperCase()} / ORIGINAL PROJECT MATERIAL</p><h1>{p.title}</h1><p>{d.intro}</p></section><section className="ov07-support-image"><img src={p.image} alt={`Original supplied presentation of ${p.title}`}/></section><section className="ov07-support-explanation"><span className="ov07-section-index">THE PROJECT / WHAT'S DOCUMENTED</span><div><h2>REAL WORK.<br/><em>REAL MATERIAL.</em></h2><p>{d.objective}</p><p className="ov07-support-source">SOURCE NOTE — {d.assetNote}</p></div></section><section className="ov07-support-next"><p>NEED SOMETHING BUILT FOR YOUR BUSINESS?</p><h2>LET'S MAKE IT<br/><em>YOUR OWN.</em></h2><Link href="/contact" className="ov07-action">DISCUSS A CUSTOM PROJECT ↗</Link><Link href="/work/custom-solutions" className="ov07-text-link">BACK TO CUSTOM SOLUTIONS ↗</Link></section></div></main>
+}

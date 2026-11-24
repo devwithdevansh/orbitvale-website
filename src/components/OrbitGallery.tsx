@@ -3,6 +3,8 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { liveCollections } from '@/lib/liveExperiences';
+import { projects as allProjects } from '@/lib/projects';
 import { prefersReducedMotion } from '@/lib/utils';
 
 export interface OrbitProject {
@@ -529,10 +531,52 @@ export function OrbitGallery({ projects = DEFAULT_PROJECTS }: OrbitGalleryProps)
                   </p>
                 </div>
 
-                {/* View link for front card */}
+                {/* Actions for front card */}
                 {isActive ? (
-                  <Link
-                    href={`/work/${item.slug}`}
+                  <div className="shrink-0 flex items-center gap-2">
+                    {(() => {
+                      const proj = allProjects.find(p => p.slug === item.slug);
+                      const demoUrl = item.slug === 'forge-gym'
+                        ? 'https://demo-web-forge-gym.onrender.com/'
+                        : (proj?.demo || (liveCollections[item.slug] ? `/live-lab/${item.slug}` : null));
+                      if (!demoUrl) return null;
+                      const isExt = demoUrl.startsWith('http');
+                      return isExt ? (
+                        <a
+                          href={demoUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => {
+                            if (pointerDownRef.current.hasMoved) {
+                              e.preventDefault();
+                              e.stopPropagation();
+                            }
+                          }}
+                          className="inline-flex items-center gap-1 rounded-full px-2.5 sm:px-3 py-1.5 font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.14em] transition-all duration-200 bg-accent text-[#07080a] font-semibold hover:bg-white"
+                          aria-label={`Explore ${item.title} live demo`}
+                        >
+                          <span>Explore Demo</span>
+                          <span>↗</span>
+                        </a>
+                      ) : (
+                        <Link
+                          href={demoUrl}
+                          onClick={(e) => {
+                            if (pointerDownRef.current.hasMoved) {
+                              e.preventDefault();
+                              e.stopPropagation();
+                            }
+                          }}
+                          className="inline-flex items-center gap-1 rounded-full px-2.5 sm:px-3 py-1.5 font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.14em] transition-all duration-200 bg-accent text-[#07080a] font-semibold hover:bg-white"
+                          aria-label={`Explore ${item.title} live demo`}
+                        >
+                          <span>Explore Demo</span>
+                          <span>↗</span>
+                        </Link>
+                      );
+                    })()}
+                    <Link
+                      href={`/work/${item.slug}`}
                     onClick={(e) => {
                       if (pointerDownRef.current.hasMoved) {
                         e.preventDefault();
@@ -547,10 +591,11 @@ export function OrbitGallery({ projects = DEFAULT_PROJECTS }: OrbitGalleryProps)
                       borderWidth: '1px',
                     }}
                     aria-label={`View ${item.title} case study`}
-                  >
-                    <span>View</span>
-                    <span>→</span>
-                  </Link>
+                    >
+                      <span>View</span>
+                      <span>→</span>
+                    </Link>
+                  </div>
                 ) : (
                   <button
                     type="button"

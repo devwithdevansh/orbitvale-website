@@ -6,6 +6,7 @@ import { useEffect, useState, useCallback } from 'react';
 import Image from 'next/image';
 import { MagneticButton } from '@/components/MagneticButton';
 import { useLenis } from '@/components/SmoothScroll';
+import { liveCollections } from '@/lib/liveExperiences';
 
 const LINKS = [
   { href: '/work', label: 'Work' },
@@ -14,8 +15,30 @@ const LINKS = [
   { href: '/contact', label: 'Contact' },
 ];
 
+
+function getDemoForPath(pathname: string): { url: string; isExternal: boolean } | null {
+  if (!pathname.startsWith('/work/')) return null;
+  const slug = pathname.replace('/work/', '').split('/')[0];
+  if (!slug) return null;
+  if (slug === 'forge-gym') {
+    return { url: 'https://demo-web-forge-gym.onrender.com/', isExternal: true };
+  }
+  if (slug === 'automotive') {
+    return { url: 'https://car-detailing-by-dwd.onrender.com/', isExternal: true };
+  }
+  if (slug === 'school-erp') {
+    return { url: 'https://school-erp-frontend-fjqv.onrender.com/', isExternal: true };
+  }
+  if (liveCollections[slug]) {
+    return { url: `/live-lab/${slug}`, isExternal: false };
+  }
+  return null;
+}
+
 export function Nav() {
   const pathname = usePathname();
+  const onProjectPage = pathname.startsWith('/work/');
+  const currentDemo = getDemoForPath(pathname);
   const { scrollToTop } = useLenis();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -53,8 +76,8 @@ export function Nav() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled
+      className={`fixed inset-x-0 top-0 z-[1000] isolate transition-[background-color,border-color,box-shadow] duration-300 ${
+        onProjectPage ? 'border-b border-white/15 bg-[#08090c]/95 backdrop-blur-xl shadow-lg shadow-black/20' : scrolled
           ? 'border-b border-line/40 bg-[#07080a]/85 backdrop-blur-md shadow-lg shadow-black/20'
           : 'bg-transparent'
       }`}
@@ -88,7 +111,7 @@ export function Nav() {
                 key={link.href}
                 href={link.href}
                 className={`relative font-mono text-[11px] uppercase tracking-[0.2em] transition-colors py-1 focus-visible:ring-1 focus-visible:ring-accent rounded ${
-                  active ? 'text-accent font-medium' : 'text-muted hover:text-ink'
+                  active ? 'text-accent font-medium' : onProjectPage ? 'text-[#b8bcc7] hover:text-white' : 'text-muted hover:text-ink'
                 }`}
                 aria-current={active ? 'page' : undefined}
               >
@@ -103,6 +126,31 @@ export function Nav() {
             );
           })}
         </nav>
+
+        {/* Explore Demo Button (When on /work/[slug]) */}
+        {currentDemo && (
+          <div className="hidden md:inline-block mr-3">
+            {currentDemo.isExternal ? (
+              <a
+                href={currentDemo.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 rounded-full border border-accent bg-accent text-[#07080a] px-4 py-2 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] transition-all duration-300 hover:bg-white hover:border-white shadow-[0_0_15px_rgba(127,243,208,0.25)]"
+              >
+                <span>Explore Demo</span>
+                <span>↗</span>
+              </a>
+            ) : (
+              <Link
+                href={currentDemo.url}
+                className="inline-flex items-center gap-1.5 rounded-full border border-accent bg-accent text-[#07080a] px-4 py-2 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] transition-all duration-300 hover:bg-white hover:border-white shadow-[0_0_15px_rgba(127,243,208,0.25)]"
+              >
+                <span>Explore Demo</span>
+                <span>↗</span>
+              </Link>
+            )}
+          </div>
+        )}
 
         {/* Magnetic CTA button */}
         <div className="hidden md:inline-block">
@@ -145,6 +193,29 @@ export function Nav() {
           className="flex flex-col gap-2 border-t border-line/40 bg-[#07080a]/95 backdrop-blur-xl px-6 py-6 md:hidden shadow-2xl"
           aria-label="Mobile Navigation"
         >
+          {currentDemo && (
+            currentDemo.isExternal ? (
+              <a
+                href={currentDemo.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setOpen(false)}
+                className="mb-2 inline-flex items-center justify-center gap-2 rounded-full border border-accent bg-accent text-[#07080a] font-mono text-xs uppercase tracking-[0.2em] font-semibold py-3 shadow-[0_0_20px_rgba(127,243,208,0.3)]"
+              >
+                <span>Explore Demo</span>
+                <span>↗</span>
+              </a>
+            ) : (
+              <Link
+                href={currentDemo.url}
+                onClick={() => setOpen(false)}
+                className="mb-2 inline-flex items-center justify-center gap-2 rounded-full border border-accent bg-accent text-[#07080a] font-mono text-xs uppercase tracking-[0.2em] font-semibold py-3 shadow-[0_0_20px_rgba(127,243,208,0.3)]"
+              >
+                <span>Explore Demo</span>
+                <span>↗</span>
+              </Link>
+            )
+          )}
           {[...LINKS, { href: '/contact', label: 'Start a project' }].map((link) => {
             const active = pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href + '/'));
             const isCta = link.href === '/contact';

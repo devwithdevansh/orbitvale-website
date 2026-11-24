@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react';
 import Link from 'next/link';
+import { featuredProjects } from '@/lib/projects';
 
 interface ServiceItem {
   num: string;
@@ -12,34 +13,10 @@ interface ServiceItem {
 }
 
 const SERVICES: ServiceItem[] = [
-  {
-    num: '01',
-    title: 'Web & Product Engineering',
-    description: 'High-throughput Next.js frontends, distributed Go/Node backends, and zero-downtime deployments.',
-    tags: ['Full-stack', 'Cloud Architecture', 'APIs'],
-    image: '/covers/project-phoenix.svg',
-  },
-  {
-    num: '02',
-    title: 'Mobile & Edge Applications',
-    description: 'Cross-platform native applications and edge runtime networks that deliver instant response times globally.',
-    tags: ['React Native', 'Edge Compute', 'Offline-First'],
-    image: '/covers/nebula-cms.svg',
-  },
-  {
-    num: '03',
-    title: 'AI & Neural Automation',
-    description: 'Intelligent agent architectures, vector pipelines, and custom models designed to accelerate business workflows.',
-    tags: ['Agent Systems', 'Vector DB', 'ML Ops'],
-    image: '/covers/astra.svg',
-  },
-  {
-    num: '04',
-    title: 'UI / UX & Design Systems',
-    description: 'Editorial design systems with mathematical spacing, tactile spring motion, and Swiss typographic restraint.',
-    tags: ['Figma to Code', 'Design Tokens', 'Motion'],
-    image: '/covers/orbitdb.svg',
-  },
+ {num:'01',title:'Ready-made software products',description:'Purpose-built systems for businesses that want a practical starting point: explore School ERP, FORGE Gym and automotive website packages.',tags:['School ERP','FORGE Gym','Automotive Websites'],image:featuredProjects[0].image},
+ {num:'02',title:'Custom software & platforms',description:'Business-specific portals, workflows, management systems and integrations shaped around real operating requirements.',tags:['ERP','Automation','Custom Development'],image:featuredProjects[3].image},
+ {num:'03',title:'Websites & digital experiences',description:'Responsive websites and interactive experiences with thoughtful art direction, performance and usability.',tags:['Web Development','UI / UX','Interaction'],image:featuredProjects[2].image},
+ {num:'04',title:'Mobile & connected experiences',description:'Mobile applications and connected web interfaces designed around the same user and business journeys.',tags:['Mobile','Member Apps','Integrated Systems'],image:featuredProjects[1].image},
 ];
 
 interface WorkItem {
@@ -52,44 +29,9 @@ interface WorkItem {
   accent: string;
 }
 
-const FEATURED_WORK: WorkItem[] = [
-  {
-    num: '01',
-    title: 'Astra',
-    slug: 'astra',
-    year: '2026',
-    category: 'AI & Analytics',
-    cover: '/covers/astra.svg',
-    accent: '#e879f9',
-  },
-  {
-    num: '02',
-    title: 'Lumen',
-    slug: 'lumen',
-    year: '2025',
-    category: 'Real-time Data',
-    cover: '/covers/lumen.svg',
-    accent: '#a3e635',
-  },
-  {
-    num: '03',
-    title: 'Nova',
-    slug: 'nova',
-    year: '2026',
-    category: 'Blockchain Infra',
-    cover: '/covers/nova.svg',
-    accent: '#f59e0b',
-  },
-  {
-    num: '04',
-    title: 'OrbitDB',
-    slug: 'orbitdb',
-    year: '2024',
-    category: 'Distributed DB',
-    cover: '/covers/orbitdb.svg',
-    accent: '#0a8f6a',
-  },
-];
+const FEATURED_WORK: WorkItem[] = featuredProjects.map((p,i)=>({
+ num:String(i+1).padStart(2,'0'),title:p.title,slug:p.slug,year:p.kind,category:p.industry,cover:p.image,accent:p.accent
+}));
 
 interface ProcessPhase {
   num: string;
@@ -104,7 +46,7 @@ const PROCESS_PHASES: ProcessPhase[] = [
   {
     num: '01',
     title: 'Discover',
-    weeks: 'Weeks 01–02',
+    weeks: 'Phase 01',
     description: 'Deep audit of business gravity, legacy architecture, user journeys, and technical constraints.',
     barWidth: '22%',
     barOffset: '0%',
@@ -112,7 +54,7 @@ const PROCESS_PHASES: ProcessPhase[] = [
   {
     num: '02',
     title: 'Define & Design',
-    weeks: 'Weeks 03–05',
+    weeks: 'Phase 02',
     description: 'Interactive Figma design systems, motion choreography, and high-fidelity prototype validation.',
     barWidth: '32%',
     barOffset: '20%',
@@ -120,7 +62,7 @@ const PROCESS_PHASES: ProcessPhase[] = [
   {
     num: '03',
     title: 'Build & Scale',
-    weeks: 'Weeks 06–09',
+    weeks: 'Phase 03',
     description: 'Production engineering sprints with continuous integration, automated testing, and performance budgets.',
     barWidth: '38%',
     barOffset: '50%',
@@ -128,7 +70,7 @@ const PROCESS_PHASES: ProcessPhase[] = [
   {
     num: '04',
     title: 'Launch & Orbit',
-    weeks: 'Week 10+',
+    weeks: 'Phase 04',
     description: 'Zero-downtime release, observability instrumentation, team onboarding, and ongoing orbital iteration.',
     barWidth: '18%',
     barOffset: '82%',
@@ -178,7 +120,7 @@ export function LightBlock() {
               </h2>
             </div>
             <p className="max-w-md text-sm sm:text-base text-[#5d6573] leading-relaxed">
-              Four core disciplines in continuous motion. Hire us for a single sprint or partner for full-cycle platform delivery.
+              Explore existing business products or work with us on a solution designed around your specific needs.
             </p>
           </div>
 
@@ -356,22 +298,22 @@ export function LightBlock() {
               How We Work
             </h2>
             <p className="mt-4 max-w-xl text-sm sm:text-base text-[#5d6573] leading-relaxed">
-              Four phases across roughly ten weeks. Each milestone closes with your explicit approval before the next phase opens.
+              Every engagement is shaped around scope, complexity and your priorities. These four phases describe how we work, not a fixed delivery timeline.
             </p>
           </div>
 
-          {/* Timeline Week Header */}
+          {/* Phase Header */}
           <div className="hidden sm:grid grid-cols-10 border-b border-[#cfd3da] pb-3 text-center font-mono text-[9px] uppercase tracking-[0.18em] text-[#88909e] mb-6">
-            <div>W01</div>
-            <div>W02</div>
-            <div>W03</div>
-            <div>W04</div>
-            <div>W05</div>
-            <div>W06</div>
-            <div>W07</div>
-            <div>W08</div>
-            <div>W09</div>
-            <div>W10+</div>
+            <div>P01</div>
+            <div>P02</div>
+            <div>P03</div>
+            <div>P04</div>
+            <div>P05</div>
+            <div>P06</div>
+            <div>P07</div>
+            <div>P08</div>
+            <div>P09</div>
+            <div>P10</div>
           </div>
 
           {/* Gantt Schedule Rows */}

@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
+import { featuredProjects } from '@/lib/projects';
 
 interface HeroCard {
   title: string;
@@ -15,46 +16,10 @@ interface HeroCard {
 }
 
 const HERO_CARDS: HeroCard[] = [
-  {
-    title: 'Project Phoenix',
-    category: 'SaaS Platform',
-    cover: '/covers/project-phoenix.svg',
-    accent: '#ff6230',
-    slug: 'project-phoenix',
-    xOffset: '-32vw',
-    rotate: '-14deg',
-    delay: 0,
-  },
-  {
-    title: 'Nebula CMS',
-    category: 'Headless CMS',
-    cover: '/covers/nebula-cms.svg',
-    accent: '#c084fc',
-    slug: 'nebula-cms',
-    xOffset: '-11vw',
-    rotate: '-5deg',
-    delay: 100,
-  },
-  {
-    title: 'OrbitDB',
-    category: 'Decentralized DB',
-    cover: '/covers/orbitdb.svg',
-    accent: '#7ff3d0',
-    slug: 'orbitdb',
-    xOffset: '11vw',
-    rotate: '6deg',
-    delay: 200,
-  },
-  {
-    title: 'Lumen',
-    category: 'Real-time Analytics',
-    cover: '/covers/lumen.svg',
-    accent: '#a3e635',
-    slug: 'lumen',
-    xOffset: '32vw',
-    rotate: '15deg',
-    delay: 300,
-  },
+  {title: featuredProjects[0].title,category:'SOFTWARE PRODUCT',cover:featuredProjects[0].image,accent:featuredProjects[0].accent,slug:featuredProjects[0].slug,xOffset:'-32vw',rotate:'-14deg',delay:0},
+  {title: featuredProjects[1].title,category:'SOFTWARE PRODUCT',cover:featuredProjects[1].image,accent:featuredProjects[1].accent,slug:featuredProjects[1].slug,xOffset:'-11vw',rotate:'-5deg',delay:100},
+  {title: featuredProjects[2].title,category:'WEBSITE COLLECTION',cover:featuredProjects[2].image,accent:featuredProjects[2].accent,slug:featuredProjects[2].slug,xOffset:'11vw',rotate:'6deg',delay:200},
+  {title: featuredProjects[3].title,category:'CUSTOM SOLUTIONS',cover:featuredProjects[3].image,accent:featuredProjects[3].accent,slug:featuredProjects[3].slug,xOffset:'32vw',rotate:'15deg',delay:300},
 ];
 
 /**
@@ -161,10 +126,10 @@ export function HeroSection() {
       {/* ── Editorial Top Micro-Copy ─────────────────────────────────────── */}
       <div className="relative z-10 mx-auto w-full max-w-7xl flex items-center justify-between text-[11px] font-mono uppercase tracking-[0.22em] text-muted">
         <div className="max-w-xs leading-relaxed hidden sm:block">
-          Digital systems in continuous motion
+          Ready-made products · Custom software
         </div>
         <div className="text-right text-dim">
-          Act 01 · The Object
+          Act 01 · Enter the Orbit
         </div>
       </div>
 

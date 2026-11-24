@@ -1,0 +1,51 @@
+{
+  "generated": "2026-11-23",
+  "version": "OV03",
+  "authenticity": "All software interface pixels originate in user supplied videos or artwork. Surrounding artwork is designed typography, geometry, crop and frames, not synthetic UI.",
+  "covers": [
+    {
+      "key": "forge-product",
+      "source": "20261123-1648-02.2458367.mp4 16s",
+      "kind": "screen-recorded software sales catalogue",
+      "scope": "Essential/Growth/Performance"
+    },
+    {
+      "key": "forge-essential",
+      "source": "20261123-1648-02.2458367.mp4 24s",
+      "kind": "screen-recorded Essential sample-gym demo",
+      "scope": "Essential only"
+    },
+    {
+      "key": "automotive-collection",
+      "source": "20261123-1653-06.6675624.mp4 2s",
+      "kind": "screen-recorded three-template selector",
+      "scope": "Kohinoor/Boond/Kavach"
+    },
+    {
+      "key": "kohinoor",
+      "source": "20261123-1653-06.6675624.mp4 32s",
+      "kind": "screen-recorded Kohinoor demo",
+      "scope": "Automotive demo, external photography rights pending"
+    },
+    {
+      "key": "school-erp",
+      "source": "assets.zip / professional-erp-dashboard.png",
+      "kind": "user-provided product mockup",
+      "scope": "School ERP Professional screenshot mockup, not live authenticated capture"
+    }
+  ],
+  "motion": [
+    {
+      "file": "forge-packages.mp4",
+      "source": "FORGE user recording 0s-7s"
+    },
+    {
+      "file": "forge-essential-experience.mp4",
+      "source": "FORGE user recording 19s-26s"
+    },
+    {
+      "file": "kohinoor-scroll.mp4",
+      "source": "Automotive user recording 18s-27s"
+    }
+  ]
+}

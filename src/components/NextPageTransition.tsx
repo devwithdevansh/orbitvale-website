@@ -39,14 +39,22 @@ export function NextPageTransition() {
   const [stripH, setStripH] = useState(210);
 
   // Discrete wipe overlay state (only updates during route handoff)
-  const [wipeState, setWipeState] = useState<'idle' | 'sweeping-in' | 'sweeping-out'>('idle');
-  const wipeRef = useRef<'idle' | 'sweeping-in' | 'sweeping-out'>('idle');
+  const [wipeState, setWipeState] = useState<'idle' | 'sweeping-in' | 'covered' | 'sweeping-out'>('idle');
+  const wipeRef = useRef<'idle' | 'sweeping-in' | 'covered' | 'sweeping-out'>('idle');
+  const safetyTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const commitLock = useRef(false);
   const stateRef = useRef(state);
   stateRef.current = state;
 
   const destination = stage.nextRoute;
+
+  // Prefetch destination route so route swap is instantaneous
+  useEffect(() => {
+    if (destination) {
+      router.prefetch(destination);
+    }
+  }, [destination, router]);
 
   // Animation values (pure refs — zero React state overhead during scrubbing)
   const targetP = useRef(0);
@@ -176,7 +184,6 @@ export function NextPageTransition() {
 
       if (prefersReducedMotion()) {
         router.push(targetRoute);
-        window.scrollTo(0, 0);
         targetP.current = 0;
         currentP.current = 0;
         commitLock.current = false;
@@ -189,21 +196,27 @@ export function NextPageTransition() {
       wipeRef.current = 'sweeping-in';
 
       setTimeout(() => {
+        // Sweep-in complete: screen is 100% covered.
+        // Hold solid covered state so there is zero chance of seeing old page top.
+        setWipeState('covered');
+        wipeRef.current = 'covered';
+
+        // Trigger asynchronous route change
         router.push(targetRoute);
-        window.scrollTo(0, 0);
-        targetP.current = 0;
-        currentP.current = 0;
-        setScrubProgress(0);
-        renderVisuals(0);
 
-        setWipeState('sweeping-out');
-        wipeRef.current = 'sweeping-out';
-
-        setTimeout(() => {
-          setWipeState('idle');
-          wipeRef.current = 'idle';
-          commitLock.current = false;
-        }, 300);
+        // Safety fallback: if navigation takes unusually long or fails, unlock
+        if (safetyTimerRef.current) clearTimeout(safetyTimerRef.current);
+        safetyTimerRef.current = setTimeout(() => {
+          if (wipeRef.current === 'covered') {
+            setWipeState('sweeping-out');
+            wipeRef.current = 'sweeping-out';
+            setTimeout(() => {
+              setWipeState('idle');
+              wipeRef.current = 'idle';
+              commitLock.current = false;
+            }, 300);
+          }
+        }, 1600);
       }, 350);
     },
     [router, setScrubProgress, renderVisuals]
@@ -252,16 +265,33 @@ export function NextPageTransition() {
     }
   }, [runAnimationStep]);
 
-  // Reset on route change
+  // Handle route change reveal and state reset
   useEffect(() => {
+    if (safetyTimerRef.current) clearTimeout(safetyTimerRef.current);
+
     targetP.current = 0;
     currentP.current = 0;
-    commitLock.current = false;
     isLoopRunning.current = false;
     isAtBottomRef.current = false;
     cancelAnimationFrame(rafId.current);
     setScrubProgress(0);
     renderVisuals(0);
+
+    // If the wipe is covering or sweeping in when the new page mounts, reveal the new page!
+    if (wipeRef.current === 'covered' || wipeRef.current === 'sweeping-in') {
+      setWipeState('sweeping-out');
+      wipeRef.current = 'sweeping-out';
+
+      const timer = setTimeout(() => {
+        setWipeState('idle');
+        wipeRef.current = 'idle';
+        commitLock.current = false;
+      }, 300);
+
+      return () => clearTimeout(timer);
+    } else {
+      commitLock.current = false;
+    }
   }, [pathname, setScrubProgress, renderVisuals]);
 
   // Measure dimensions
@@ -574,16 +604,22 @@ export function NextPageTransition() {
       {/* ── Diagonal Sweep Overlay ── */}
       {wipeState !== 'idle' && (
         <div className="fixed inset-0 z-50 pointer-events-none overflow-hidden" aria-hidden="true">
-          <div
-            className={`absolute inset-0 bg-[#08090b] ${
-              wipeState === 'sweeping-in' ? 'diagonal-sweep-tl-in' : 'diagonal-sweep-tl-out'
-            }`}
-          />
-          <div
-            className={`absolute inset-0 bg-[#08090b] ${
-              wipeState === 'sweeping-in' ? 'diagonal-sweep-br-in' : 'diagonal-sweep-br-out'
-            }`}
-          />
+          {wipeState === 'covered' ? (
+            <div className="absolute inset-0 bg-[#08090b]" />
+          ) : (
+            <>
+              <div
+                className={`absolute inset-0 bg-[#08090b] ${
+                  wipeState === 'sweeping-in' ? 'diagonal-sweep-tl-in' : 'diagonal-sweep-tl-out'
+                }`}
+              />
+              <div
+                className={`absolute inset-0 bg-[#08090b] ${
+                  wipeState === 'sweeping-in' ? 'diagonal-sweep-br-in' : 'diagonal-sweep-br-out'
+                }`}
+              />
+            </>
+          )}
         </div>
       )}
     </>

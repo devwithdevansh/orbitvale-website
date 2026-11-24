@@ -18,7 +18,7 @@ export const ROUTE_STAGES: Record<string, RouteStage> = {
     prevHeading: '',
     nextLabel: '02 / 05',
     prevLabel: '',
-    subtext: 'Case studies across platform engineering, distributed systems, and real-time interfaces.',
+    subtext: 'Three product offerings and one tailored development practice, all from Orbitvale.',
   },
   '/work': {
     pathname: '/work',
@@ -63,6 +63,20 @@ export const ROUTE_STAGES: Record<string, RouteStage> = {
 };
 
 export function getRouteStage(pathname: string): RouteStage {
+  if (pathname.startsWith('/live-lab/')) {
+    // Live viewers should never accidentally inherit the homepage's next-page destination.
+    const slug = pathname.split('/')[2] || '';
+    return {
+      pathname,
+      nextRoute: null,
+      prevRoute: `/work/${slug}`,
+      nextHeading: '',
+      prevHeading: 'PROJECT STORY',
+      nextLabel: '',
+      prevLabel: 'WORK',
+      subtext: 'Return to the Orbitvale case study after exploring the source experience.',
+    };
+  }
   if (pathname.startsWith('/work/')) {
     return {
       pathname,

@@ -18,9 +18,9 @@ const MANIFESTO_WORDS = [
 ];
 
 const BEATS = [
-  { label: 'Who we are', text: 'An IT company that builds systems you can feel.' },
-  { label: 'What we build', text: 'Immersive products, design systems, and platforms.' },
-  { label: 'Who for', text: 'Ambitious teams who need digital experiences that orbit their goals.' },
+  { label: 'Who we are', text: 'A creative technology company building for real business needs.' },
+  { label: 'What we build', text: 'Ready-made products and custom-built digital solutions.' },
+  { label: 'Who for', text: 'Organisations across industries ready to modernise how they work.' },
 ];
 
 interface StatementSectionProps {
